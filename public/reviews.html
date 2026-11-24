@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reviews — NUTYBLISS</title>
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+.reviews-hero {
+  background: var(--bg-2); border-bottom: 3px solid var(--ink); padding: 64px 32px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.reviews-hero::before {
+  content:""; position:absolute; width:500px;height:500px;border-radius:50%;
+  background:var(--honey); top:-200px; right:-150px; opacity:0.25;
+}
+.reviews-hero-inner { position:relative; z-index:2; max-width:700px; margin:0 auto; }
+.reviews-hero h1 { font-family:'Bagel Fat One',cursive;font-size:clamp(48px,7vw,96px);
+  color:var(--purple);text-shadow:4px 4px 0 var(--orange);margin:10px 0 14px; }
+.hero-rating-big { display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;flex-wrap:wrap; }
+.rating-num { font-family:'Bagel Fat One',cursive;font-size:72px;color:var(--orange);line-height:1; }
+.rating-info { text-align:left; }
+.rating-stars-big { color:var(--honey);font-size:28px;letter-spacing:2px; }
+.rating-count { font-family:'Fredoka',sans-serif;font-size:14px;font-weight:600;color:var(--ink-soft);margin-top:4px; }
+
+/* Rating breakdown */
+.rating-bars { max-width:400px;margin:28px auto 0; }
+.rating-bar-row { display:grid;grid-template-columns:60px 1fr 40px;align-items:center;gap:10px;margin-bottom:8px; }
+.rating-bar-label { font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600;color:var(--ink-soft); }
+.rating-bar-wrap { height:12px;background:rgba(42,22,8,0.1);border-radius:999px;overflow:hidden;border:1.5px solid var(--ink); }
+.rating-bar-fill { height:100%;border-radius:999px;background:var(--honey); }
+.rating-bar-pct { font-family:'Fredoka',sans-serif;font-size:12px;font-weight:600;color:var(--ink-soft); }
+
+/* Reviews grid */
+.reviews-body { max-width:1300px;margin:0 auto;padding:72px 32px; }
+.reviews-toolbar { display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:32px; }
+.reviews-filters { display:flex;gap:8px;flex-wrap:wrap; }
+.r-chip { padding:7px 16px;border-radius:999px;border:2px solid var(--ink);background:var(--bg);
+  font-family:'Fredoka',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;
+  text-transform:uppercase;cursor:pointer;transition:all 0.15s;box-shadow:2px 2px 0 var(--ink); }
+.r-chip.active { background:var(--purple);color:#fff; }
+.r-chip:hover { transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink); }
+
+.reviews-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px; }
+.review-card { background:var(--paper);border:2.5px solid var(--ink);border-radius:18px;
+  padding:24px;box-shadow:5px 5px 0 var(--ink);transition:transform 0.2s;display:flex;flex-direction:column; }
+.review-card:hover { transform:translateY(-4px); }
+.review-stars { color:var(--honey);font-size:18px;letter-spacing:2px;margin-bottom:10px; }
+.review-text { font-size:15px;font-weight:500;line-height:1.5;flex:1;margin:0 0 16px; }
+.review-footer { display:flex;align-items:center;gap:10px;margin-top:auto; }
+.review-avatar { width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bagel Fat One',cursive;font-size:13px;color:#fff;flex-shrink:0; }
+.review-name { font-family:'Bagel Fat One',cursive;font-size:15px;color:var(--purple); }
+.review-meta { font-size:11px;font-weight:500;color:var(--ink-soft); }
+.review-product { display:inline-flex;align-items:center;gap:4px;background:var(--bg-2);
+  border:1.5px solid var(--ink);border-radius:999px;padding:2px 10px;
+  font-size:11px;font-weight:700;color:var(--ink-soft);margin-left:auto;white-space:nowrap; }
+.verified-badge { color:var(--leaf);font-size:11px;font-weight:700; }
+
+/* Write a review */
+.write-review { background:var(--purple);border-bottom:3px solid var(--ink);padding:72px 32px; }
+.write-inner { max-width:680px;margin:0 auto; }
+.write-inner .section-title { color:#fff; }
+.write-inner .eyebrow { color:var(--orange); }
+.review-form { margin-top:32px; }
+.review-form .form-input { background:var(--paper); }
+.star-select { display:flex;gap:6px;margin-bottom:6px; }
+.star-select span { font-size:32px;cursor:pointer;color:rgba(255,255,255,0.3);transition:color 0.1s;user-select:none; }
+.star-select span.lit { color:var(--honey); }
+.form-label-white { display:block;font-family:'Fredoka',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:0.8px;text-transform:uppercase;color:rgba(255,255,255,0.75);margin-bottom:6px; }
+.review-success { display:none;text-align:center;padding:28px;
+  background:rgba(255,255,255,0.12);border:2px dashed rgba(255,255,255,0.4);border-radius:16px;
+  font-family:'Bagel Fat One',cursive;font-size:24px;color:var(--orange); }
+
+@media (max-width:600px) { .reviews-body { padding:48px 20px; } }
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+
+<!-- Hero -->
+<section class="reviews-hero">
+  <div class="reviews-hero-inner">
+    <div class="eyebrow" style="justify-content:center;"><span class="dot"></span>Customer Love</div>
+    <h1>Pure peanut love.</h1>
+    <div class="hero-rating-big">
+      <div class="rating-num">4.9</div>
+      <div class="rating-info">
+        <div class="rating-stars-big">★★★★★</div>
+        <div class="rating-count">Based on 7,200+ verified reviews</div>
+      </div>
+    </div>
+    <div class="rating-bars">
+      <div class="rating-bar-row"><span class="rating-bar-label">5 stars</span><div class="rating-bar-wrap"><div class="rating-bar-fill" style="width:88%"></div></div><span class="rating-bar-pct">88%</span></div>
+      <div class="rating-bar-row"><span class="rating-bar-label">4 stars</span><div class="rating-bar-wrap"><div class="rating-bar-fill" style="width:9%;background:var(--orange)"></div></div><span class="rating-bar-pct">9%</span></div>
+      <div class="rating-bar-row"><span class="rating-bar-label">3 stars</span><div class="rating-bar-wrap"><div class="rating-bar-fill" style="width:2%;background:var(--ink-soft)"></div></div><span class="rating-bar-pct">2%</span></div>
+      <div class="rating-bar-row"><span class="rating-bar-label">1–2 stars</span><div class="rating-bar-wrap"><div class="rating-bar-fill" style="width:1%;background:var(--tomato)"></div></div><span class="rating-bar-pct">1%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews Grid -->
+<div class="reviews-body">
+  <div class="reviews-toolbar">
+    <div class="reviews-filters" id="star-filters">
+      <button class="r-chip active" data-stars="all">All</button>
+      <button class="r-chip" data-stars="5">★★★★★</button>
+      <button class="r-chip" data-stars="4">★★★★</button>
+    </div>
+    <span id="reviews-count" style="font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.8px;"></span>
+  </div>
+  <div class="reviews-grid" id="reviews-grid">
+    <div class="spinner" style="grid-column:1/-1;"></div>
+  </div>
+  <div id="load-more-wrap" style="text-align:center;margin-top:36px;display:none;">
+    <button class="btn btn-ghost" id="load-more-btn">Load more reviews →</button>
+  </div>
+</div>
+
+<!-- Write a review -->
+<section class="write-review">
+  <div class="write-inner">
+    <div class="eyebrow"><span class="dot" style="background:var(--orange);border-color:#fff;"></span>Share Your Experience</div>
+    <h2 class="section-title">Write a review.</h2>
+    <form class="review-form" id="review-form">
+      <div class="form-group">
+        <label class="form-label-white">Your Rating *</label>
+        <div class="star-select" id="star-select">
+          <span data-val="1">★</span>
+          <span data-val="2">★</span>
+          <span data-val="3">★</span>
+          <span data-val="4">★</span>
+          <span data-val="5">★</span>
+        </div>
+        <input type="hidden" id="rating-val" value="0" />
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="form-group">
+          <label class="form-label-white">Your Name *</label>
+          <input type="text" class="form-input" id="r-name" placeholder="Priya M." required />
+        </div>
+        <div class="form-group">
+          <label class="form-label-white">Your Role</label>
+          <input type="text" class="form-input" id="r-role" placeholder="Yoga teacher, lifter, mom…" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label-white">Which product?</label>
+        <select class="form-input" id="r-product">
+          <option>Classic Smooth</option>
+          <option>Super Crunchy</option>
+          <option>Choco Bliss</option>
+          <option>Choc-Chip Bliss</option>
+          <option>Honey Drip</option>
+          <option>Protein+</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label-white">Your Review *</label>
+        <textarea class="form-input" id="r-text" placeholder="What do you love about it? How do you use it?" required style="min-height:110px;"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="font-size:15px;padding:13px 28px;">Submit Review →</button>
+      <div id="review-error" style="color:var(--honey);font-size:13px;font-weight:600;margin-top:8px;display:none;"></div>
+    </form>
+    <div class="review-success" id="review-success">🥜 Thanks for the love! Your review is in for moderation.</div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="/js/main.js"></script>
+<script>
+let allReviews = [];
+let visibleCount = 8;
+let filterStars = 'all';
+
+async function loadReviews() {
+  try {
+    const res = await fetch('/api/reviews');
+    const { data } = await res.json();
+    allReviews = data;
+    renderReviews();
+  } catch(e) {
+    document.getElementById('reviews-grid').innerHTML = '<p style="color:var(--ink-soft);">Could not load reviews.</p>';
+  }
+}
+
+function renderReviews() {
+  const filtered = filterStars === 'all' ? allReviews : allReviews.filter(r => r.stars == filterStars);
+  const visible  = filtered.slice(0, visibleCount);
+  const grid = document.getElementById('reviews-grid');
+  const countEl = document.getElementById('reviews-count');
+  countEl.textContent = filtered.length + ' review' + (filtered.length !== 1 ? 's' : '');
+
+  if (!visible.length) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">⭐</div><h3>No reviews yet</h3><p>Be the first!</p></div>';
+    return;
+  }
+  grid.innerHTML = visible.map(r => `
+    <div class="review-card">
+      <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+      <p class="review-text">"${r.text}"</p>
+      <div class="review-footer">
+        <div class="review-avatar" style="background:${r.avatarColor}">${r.avatar}</div>
+        <div>
+          <div class="review-name">${r.name}</div>
+          <div class="review-meta">${r.role} ${r.verified ? '<span class="verified-badge">✓ Verified</span>' : ''}</div>
+        </div>
+        <span class="review-product">🥜 ${r.product}</span>
+      </div>
+    </div>`).join('');
+
+  const moreWrap = document.getElementById('load-more-wrap');
+  moreWrap.style.display = filtered.length > visibleCount ? 'block' : 'none';
+}
+
+// Star filter chips
+document.querySelectorAll('[data-stars]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('[data-stars]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    filterStars = chip.dataset.stars;
+    visibleCount = 8;
+    renderReviews();
+  });
+});
+
+document.getElementById('load-more-btn').addEventListener('click', () => {
+  visibleCount += 8;
+  renderReviews();
+});
+
+// Star select for form
+let selectedStars = 0;
+document.querySelectorAll('#star-select span').forEach(star => {
+  star.addEventListener('mouseover', () => {
+    const v = +star.dataset.val;
+    document.querySelectorAll('#star-select span').forEach((s,i) => s.classList.toggle('lit', i < v));
+  });
+  star.addEventListener('mouseleave', () => {
+    document.querySelectorAll('#star-select span').forEach((s,i) => s.classList.toggle('lit', i < selectedStars));
+  });
+  star.addEventListener('click', () => {
+    selectedStars = +star.dataset.val;
+    document.getElementById('rating-val').value = selectedStars;
+  });
+});
+
+// Submit review
+document.getElementById('review-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const errEl = document.getElementById('review-error');
+  errEl.style.display = 'none';
+  if (!selectedStars) { errEl.textContent = 'Please select a star rating.'; errEl.style.display = 'block'; return; }
+  const btn = e.target.querySelector('button');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  try {
+    const res = await fetch('/api/reviews', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        stars: selectedStars,
+        name: document.getElementById('r-name').value,
+        role: document.getElementById('r-role').value,
+        product: document.getElementById('r-product').value,
+        text: document.getElementById('r-text').value
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('review-form').style.display = 'none';
+      document.getElementById('review-success').style.display = 'block';
+    } else {
+      errEl.textContent = data.message; errEl.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Submit Review →';
+    }
+  } catch(e) {
+    errEl.textContent = 'Network error. Try again.'; errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Submit Review →';
+  }
+});
+
+loadReviews();
+</script>
+</body>
+</html>

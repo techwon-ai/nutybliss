@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NUTYBLISS — Spoonfuls of pure peanut joy</title>
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+/* ── Hero ── */
+.hero {
+  position: relative; padding: 64px 32px 80px;
+  overflow: hidden; border-bottom: 3px solid var(--ink);
+  background: var(--bg);
+}
+.hero::before {
+  content: ""; position: absolute;
+  width: 580px; height: 580px; border-radius: 50%;
+  background: var(--orange); top: -200px; right: -200px; opacity: 0.45;
+}
+.hero::after {
+  content: ""; position: absolute;
+  width: 380px; height: 380px; border-radius: 50%;
+  background: var(--purple); bottom: -150px; left: -150px; opacity: 0.16;
+}
+.hero-bg-text {
+  position: absolute; bottom: 20px; left: -20px; right: -20px;
+  font-family: 'Bagel Fat One', cursive; font-size: 180px; line-height: 1;
+  color: rgba(91,42,138,0.06); white-space: nowrap; pointer-events: none;
+  user-select: none; letter-spacing: 4px; overflow: hidden;
+}
+.hero-inner {
+  position: relative; z-index: 2; max-width: 1300px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 48px; align-items: center; min-height: 520px;
+}
+.hero-title {
+  font-family: 'Bagel Fat One', cursive;
+  font-size: clamp(54px, 7vw, 108px);
+  line-height: 0.92; margin: 16px 0 20px;
+  color: var(--purple); text-shadow: 4px 4px 0 var(--orange);
+}
+.hero-sub { font-size: 19px; font-weight: 500; max-width: 440px; margin: 0 0 28px; color: var(--ink); }
+.hero-cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-stage {
+  height: 520px; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.stage-circle {
+  position: absolute; width: 440px; height: 440px;
+  border-radius: 50%; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(245,126,42,0.15);
+}
+.stage-ring {
+  position: absolute; width: 520px; height: 520px;
+  border: 3px dashed var(--purple); border-radius: 50%;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  animation: spin 60s linear infinite; opacity: 0.4;
+}
+@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+.hero-jar-wrap {
+  position: relative; z-index: 3;
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);} }
+.hero-jar-img {
+  width: 320px; height: 320px;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 32px rgba(0,0,0,0.22));
+  transition: opacity 0.35s ease;
+}
+/* Slide dots */
+.hero-dots { display: flex; gap: 10px; margin-top: 32px; }
+.hero-dot { width: 36px; height: 6px; border-radius: 3px; background: rgba(42,22,8,0.18); border: none; cursor: pointer; transition: all 0.2s; padding: 0; }
+.hero-dot.active { background: var(--purple); width: 56px; }
+
+/* ── Trust Bar ── */
+.trust-bar {
+  background: var(--paper); border-bottom: 3px solid var(--ink);
+  padding: 28px 32px;
+}
+.trust-strip {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-around;
+  gap: 24px; flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 18px;
+  border: 2.5px solid var(--ink); border-radius: 16px;
+  background: var(--bg); box-shadow: 3px 3px 0 var(--ink);
+  font-family: 'Fredoka', sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-soft);
+  min-width: 120px; text-align: center;
+  animation: trustFloat 4s ease-in-out infinite;
+  transition: transform 0.2s;
+}
+.trust-item:hover { transform: scale(1.06) rotate(-2deg); }
+.trust-item:nth-child(even) { animation-direction: reverse; }
+.trust-icon { font-size: 30px; }
+@keyframes trustFloat { 0%,100%{transform:translateY(0) rotate(-1deg);} 50%{transform:translateY(-5px) rotate(1deg);} }
+
+/* ── Category Split ── */
+.cat-split { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 3px solid var(--ink); }
+.cat-card {
+  padding: 56px 40px; display: flex; align-items: center; gap: 24px;
+  position: relative; overflow: hidden; transition: background 0.3s;
+  cursor: pointer; text-decoration: none;
+}
+.cat-card:first-child { border-right: 3px solid var(--ink); background: var(--purple); color: #fff; }
+.cat-card:last-child  { background: var(--orange); color: #fff; }
+.cat-jar-big {
+  width: 160px; height: 180px; border-radius: 14px 14px 50% 50% / 14px 14px 40% 40%;
+  border: 3px solid var(--ink); flex-shrink: 0;
+  display: flex; align-items: flex-end; justify-content: center; padding-bottom: 14px;
+  font-size: 52px; box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 0.3s cubic-bezier(.2,.9,.3,1.3);
+}
+.cat-card:hover .cat-jar-big { transform: translateY(-8px) rotate(-4deg); }
+.cat-card:first-child .cat-jar-big { background: linear-gradient(160deg,#e8b62a,#c8891a); }
+.cat-card:last-child  .cat-jar-big { background: linear-gradient(160deg,#5c3317,#3a1f0a); }
+.cat-title { font-family: 'Bagel Fat One', cursive; font-size: clamp(32px,4vw,56px); line-height: 1; margin: 10px 0 18px; }
+.cat-card .eyebrow { color: var(--orange); }
+.cat-card:last-child .eyebrow { color: rgba(255,255,255,0.85); }
+
+/* ── Hot Selling ── */
+.hot-selling { padding: 88px 32px; border-bottom: 3px solid var(--ink); background: var(--bg-2); }
+.hot-head { display: flex; justify-content: space-between; align-items: flex-end; max-width: 1300px; margin: 0 auto 32px; gap: 24px; flex-wrap: wrap; }
+.hot-track { display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 8px 4px 16px; max-width: 1300px; margin: 0 auto; scrollbar-width: thin; }
+.hot-track::-webkit-scrollbar { height: 6px; }
+.hot-arrows { display: flex; gap: 10px; }
+.hot-arr {
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 2.5px solid var(--ink); background: var(--paper);
+  font-size: 20px; font-weight: 700;
+  box-shadow: 3px 3px 0 var(--ink); transition: all 0.15s; cursor: pointer;
+}
+.hot-arr:hover { background: var(--orange); color: #fff; transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--ink); }
+.hot-card { flex: 0 0 280px; scroll-snap-align: start; }
+
+/* ── Vs Others ── */
+.vs-section { padding: 88px 32px; border-bottom: 3px solid var(--ink); background: var(--bg); }
+.vs-table {
+  max-width: 860px; margin: 0 auto;
+  border: 3px solid var(--ink); background: var(--paper);
+  overflow: hidden; border-radius: 28px; box-shadow: 6px 6px 0 var(--ink);
+}
+.vs-head { display: grid; grid-template-columns: 1fr 140px 140px; align-items: center;
+  background: var(--purple); color: #fff; padding: 20px 24px;
+  font-family: 'Bagel Fat One', cursive; font-size: 20px; text-align: center; }
+.vs-us { color: var(--orange); font-size: 24px; }
+.vs-them { opacity: 0.65; }
+.vs-row { display: grid; grid-template-columns: 1fr 140px 140px; align-items: center;
+  padding: 15px 24px; border-top: 2px solid rgba(42,22,8,0.1); font-size: 15px; font-weight: 500; }
+.vs-cell { text-align: center; font-family: 'Bagel Fat One', cursive; font-size: 22px; }
+.vs-yes { color: var(--leaf); }
+.vs-no  { color: var(--ink-soft); opacity: 0.45; }
+
+/* ── Reviews strip ── */
+.reviews-home { padding: 88px 32px; border-bottom: 3px solid var(--ink); background: var(--bg-2); }
+.reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; max-width: 1300px; margin: 0 auto; }
+.review-card { background: var(--paper); border: 2.5px solid var(--ink); border-radius: 18px; padding: 22px 22px 20px; box-shadow: 5px 5px 0 var(--ink); transition: transform 0.2s; }
+.review-card:hover { transform: translateY(-4px); }
+.review-stars { color: var(--honey); font-size: 16px; letter-spacing: 2px; margin-bottom: 8px; }
+.review-text { font-size: 15px; font-weight: 500; line-height: 1.45; margin: 0 0 16px; }
+.review-author { display: flex; align-items: center; gap: 10px; }
+.review-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--ink); display: flex; align-items: center; justify-content: center; font-family: 'Bagel Fat One', cursive; font-size: 12px; color: #fff; flex-shrink: 0; }
+.review-name { font-family: 'Bagel Fat One', cursive; font-size: 15px; color: var(--purple); }
+.review-role { font-size: 11px; font-weight: 500; color: var(--ink-soft); }
+
+/* ── Newsletter ── */
+.newsletter { padding: 80px 32px; background: var(--purple); border-bottom: 3px solid var(--ink); }
+.news-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+.news-inner .section-title { color: #fff; }
+.news-inner .eyebrow { color: var(--orange); justify-content: center; }
+.news-inner p { color: rgba(255,255,255,0.9); font-size: 17px; font-weight: 500; margin: 12px 0 24px; }
+.news-form { display: flex; gap: 8px; max-width: 460px; margin: 0 auto; }
+.news-form input { flex: 1; padding: 13px 18px; border-radius: 999px; border: 2.5px solid var(--ink); background: var(--paper); font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 15px; color: var(--ink); outline: none; }
+.news-form input:focus { border-color: var(--orange); }
+.news-done { font-family: 'Bagel Fat One', cursive; font-size: 24px; color: var(--orange); margin-top: 16px; display: none; }
+
+.cat-card:hover .cat-jar-real { transform: translateY(-10px) rotate(-4deg); }
+
+/* ── Mascot Section ── */
+.mascot-section {
+  padding: 88px 32px; background: var(--purple); color: #fff;
+  border-bottom: 3px solid var(--ink); position: relative; overflow: hidden;
+}
+.mascot-section::before {
+  content:""; position:absolute; width:480px;height:480px;border-radius:50%;
+  background:var(--orange); top:-180px; left:-140px; opacity:0.22;
+}
+.mascot-grid {
+  position:relative; max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns:340px 1fr; gap:56px; align-items:center;
+}
+.mascot-art-wrap {
+  background:var(--orange); border:3px solid var(--ink); border-radius:28px;
+  padding:28px; box-shadow:6px 6px 0 var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  animation:float 5s ease-in-out infinite;
+}
+.mascot-copy .eyebrow { color:var(--orange); }
+.mascot-copy .section-title { color:#fff; }
+.mascot-intro { font-size:17px;font-weight:500;margin:12px 0 28px;color:rgba(255,255,255,0.92);max-width:520px; }
+.chart-list { display:flex;flex-direction:column;gap:14px; }
+.chart-row { display:grid;grid-template-columns:130px 1fr 70px;align-items:center;gap:14px; }
+.chart-label { font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase; }
+.chart-bar-wrap { height:22px;background:rgba(255,255,255,0.18);border-radius:999px;border:2px solid var(--ink);overflow:hidden; }
+.chart-bar { height:100%;border-radius:999px;border-right:2px solid var(--ink);animation:barIn 1.2s cubic-bezier(.2,.9,.3,1.1); transform-origin:left; }
+@keyframes barIn { from{transform:scaleX(0);} to{transform:scaleX(1);} }
+.chart-val { font-family:'Bagel Fat One',cursive;font-size:18px;color:var(--orange); }
+.mascot-tags { margin-top:28px;display:flex;flex-wrap:wrap;gap:8px; }
+.m-tag { background:var(--paper);color:var(--ink);border:2px solid var(--ink);padding:7px 14px;border-radius:999px;font-family:'Fredoka',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.5px;box-shadow:2px 2px 0 var(--ink); }
+
+@media (max-width:900px) {
+  .mascot-grid { grid-template-columns:1fr; }
+  .mascot-art-wrap { max-width:260px; margin:0 auto; }
+}
+
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-stage { height: 360px; }
+  .cat-split { grid-template-columns: 1fr; }
+  .cat-card:first-child { border-right: none; border-bottom: 3px solid var(--ink); }
+}
+@media (max-width: 600px) {
+  .hero { padding: 40px 20px 60px; }
+  .hero-title { font-size: 52px; }
+}
+
+/* ── Bundle Deals ─────────────────────────────────────────────── */
+.bundles-section {
+  padding: 88px 32px;
+  background: var(--honey);
+  border-bottom: 3px solid var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+.bundles-section::before {
+  content: "";
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: var(--orange);
+  top: -300px; right: -200px;
+  opacity: 0.15;
+  pointer-events: none;
+}
+.bundles-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
+.bundles-sub {
+  text-align: center;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  max-width: 560px;
+  margin: 8px auto 48px;
+  line-height: 1.6;
+}
+.bundles-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.bundle-card {
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: 24px;
+  padding: 28px 20px 24px;
+  box-shadow: 5px 5px 0 var(--ink);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.bundle-card:hover { transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--ink); }
+.bundle-card.highlight { background: var(--purple); border-color: var(--purple); }
+.bundle-card.highlight .bundle-name,
+.bundle-card.highlight .bundle-tagline,
+.bundle-card.highlight .bundle-price,
+.bundle-card.highlight .bundle-orig { color: #fff; }
+.bundle-card.highlight .bundle-orig { opacity: 0.65; }
+.bundle-badge {
+  position: absolute;
+  top: -14px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--orange);
+  color: #fff;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+  white-space: nowrap;
+}
+.bundle-card.highlight .bundle-badge { background: var(--honey); color: var(--ink); }
+.bundle-jars {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: -8px;
+  margin-bottom: 16px;
+  min-height: 100px;
+  position: relative;
+}
+.bundle-jars img {
+  width: 64px; height: 64px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.2));
+  margin: 0 -6px;
+  transition: transform 0.2s;
+}
+.bundle-card:hover .bundle-jars img:nth-child(2) { transform: translateY(-6px); }
+.bundle-jars-count {
+  position: absolute; bottom: -4px; right: 8px;
+  background: var(--orange); color: #fff;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 999px;
+  border: 2px solid var(--ink);
+}
+.bundle-name {
+  font-family: 'Bagel Fat One', cursive;
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.bundle-tagline {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+  line-height: 1.4;
+  flex: 1;
+}
+.bundle-pricing { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+.bundle-price {
+  font-family: 'Bagel Fat One', cursive;
+  font-size: 22px;
+  color: var(--ink);
+}
+.bundle-orig {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-decoration: line-through;
+}
+.bundle-saving {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--leaf);
+  margin-bottom: 16px;
+}
+.bundle-card.highlight .bundle-saving { color: var(--honey); }
+.btn-bundle {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 12px;
+  border: 2.5px solid var(--ink);
+  background: var(--orange);
+  color: #fff;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.btn-bundle:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--ink); }
+.btn-bundle:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.bundle-card.highlight .btn-bundle { background: var(--honey); color: var(--ink); }
+
+@media (max-width: 1100px) { .bundles-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) {
+  .bundles-section { padding: 64px 20px; }
+  .bundles-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg-text">NUTYBLISS · NUTYBLISS</div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="dot"></span><span id="hero-eyebrow">NEW · LAUNCH WEEK</span></div>
+      <h1 class="hero-title" id="hero-title">Spread<br>the joy.</h1>
+      <p class="hero-sub" id="hero-sub">Stone-ground peanut butter. No palm oil. No junk. Just peanuts.</p>
+      <div class="hero-cta-row">
+        <a href="/shop.html" class="btn btn-primary">Shop the jars →</a>
+        <a href="/story.html" class="btn btn-ghost">Our story</a>
+      </div>
+      <div class="hero-dots" id="hero-dots"></div>
+    </div>
+    <div class="hero-stage">
+      <div class="stage-circle"></div>
+      <div class="stage-ring"></div>
+      <div class="hero-jar-wrap">
+        <img id="hero-jar-img" class="hero-jar-img" src="/images/jar-classic.png" alt="NUTYBLISS Peanut Butter" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust Bar -->
+<div class="trust-bar">
+  <div class="trust-strip">
+    <div class="trust-item"><span class="trust-icon">🌿</span>No Palm Oil</div>
+    <div class="trust-item"><span class="trust-icon">🚫</span>No Added Sugar</div>
+    <div class="trust-item"><span class="trust-icon">💪</span>High Protein</div>
+    <div class="trust-item"><span class="trust-icon">🌱</span>Non-GMO</div>
+    <div class="trust-item"><span class="trust-icon">🏆</span>PSQCA Certified</div>
+    <div class="trust-item"><span class="trust-icon">🚚</span>Free Shipping Rs.1,999+</div>
+  </div>
+</div>
+
+<!-- Category Split -->
+<div class="cat-split">
+  <a href="/shop.html?flavor=classic" class="cat-card">
+    <img src="/images/jar-classic.png" alt="Classic Peanut Butter"
+         style="width:160px;height:180px;object-fit:contain;filter:drop-shadow(0 8px 18px rgba(0,0,0,0.25));transition:transform 0.3s ease;flex-shrink:0;" class="cat-jar-real" />
+    <div>
+      <div class="eyebrow"><span class="dot"></span>Classic Range</div>
+      <h2 class="cat-title">Peanut<br>Butter</h2>
+      <span class="btn btn-primary btn-sm">Shop Classic →</span>
+    </div>
+  </a>
+  <a href="/shop.html?flavor=choco" class="cat-card">
+    <img src="/images/jar-choco.png" alt="Chocolate Peanut Butter"
+         style="width:160px;height:180px;object-fit:contain;filter:drop-shadow(0 8px 18px rgba(0,0,0,0.25));transition:transform 0.3s ease;flex-shrink:0;" class="cat-jar-real" />
+    <div>
+      <div class="eyebrow"><span class="dot"></span>Chocolate Range</div>
+      <h2 class="cat-title">Chocolate<br>Flavors</h2>
+      <span class="btn btn-primary btn-sm" style="background:var(--purple);">Shop Chocolate →</span>
+    </div>
+  </a>
+</div>
+
+<!-- Hot Selling -->
+<section class="hot-selling">
+  <div class="hot-head">
+    <div>
+      <div class="eyebrow"><span class="dot"></span>Hot Right Now</div>
+      <h2 class="section-title">Customer<br>Favorites</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="hot-arrows">
+        <button class="hot-arr" id="arr-left">←</button>
+        <button class="hot-arr" id="arr-right">→</button>
+      </div>
+      <a href="/shop.html" class="btn btn-ghost btn-sm">View All →</a>
+    </div>
+  </div>
+  <div class="hot-track" id="hot-track">
+    <div style="display:flex;align-items:center;justify-content:center;width:100%;padding:32px;"><div class="spinner"></div></div>
+  </div>
+</section>
+
+<!-- Bundle Deals -->
+<section class="bundles-section" id="bundles-section">
+  <div class="bundles-inner">
+    <div class="eyebrow" style="justify-content:center;margin-bottom:8px;"><span class="dot"></span>Bundle &amp; Save</div>
+    <h2 class="section-title" style="text-align:center;">Stack jars.<br>Stack savings.</h2>
+    <p class="bundles-sub">Pakistan's best value peanut butter deals — more jars, less spend. Perfect for households, gyms, and serious snackers.</p>
+    <div class="bundles-grid" id="bundles-grid">
+      <div style="text-align:center;padding:32px;"><div class="spinner"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Vs Others -->
+<section class="vs-section">
+  <div style="max-width:860px;margin:0 auto 40px;">
+    <div class="eyebrow" style="justify-content:center;margin-bottom:8px;"><span class="dot"></span>Why Us</div>
+    <h2 class="section-title" style="text-align:center;">NUTYBLISS<br>vs. The Rest</h2>
+  </div>
+  <div class="vs-table">
+    <div class="vs-head">
+      <div>Feature</div>
+      <div class="vs-us">NUTYBLISS</div>
+      <div class="vs-them">Others</div>
+    </div>
+    <div class="vs-row"><div>No Palm Oil</div><div class="vs-cell vs-yes">✓</div><div class="vs-cell vs-no">✗</div></div>
+    <div class="vs-row"><div>No Added Sugar</div><div class="vs-cell vs-yes">✓</div><div class="vs-cell vs-no">✗</div></div>
+    <div class="vs-row"><div>Stone Ground</div><div class="vs-cell vs-yes">✓</div><div class="vs-cell vs-no">✗</div></div>
+    <div class="vs-row"><div>Zero Preservatives</div><div class="vs-cell vs-yes">✓</div><div class="vs-cell vs-no">✗</div></div>
+    <div class="vs-row"><div>High Protein (25g+)</div><div class="vs-cell vs-yes">✓</div><div class="vs-cell vs-no">✗</div></div>
+    <div class="vs-row"><div>Non-GMO</div><div class="vs-cell vs-yes">✓</div><div class="vs-cell vs-no">✗</div></div>
+    <div class="vs-row"><div>PSQCA Certified</div><div class="vs-cell vs-yes">✓</div><div class="vs-cell vs-yes">✓</div></div>
+  </div>
+</section>
+
+<!-- Reviews Strip -->
+<section class="reviews-home">
+  <div style="max-width:1300px;margin:0 auto 40px;">
+    <div class="eyebrow"><span class="dot"></span>What People Say</div>
+    <h2 class="section-title">Pure peanut<br>love. Verified.</h2>
+  </div>
+  <div class="reviews-grid" id="reviews-home-grid">
+    <div class="spinner"></div>
+  </div>
+  <div style="text-align:center;margin-top:36px;">
+    <a href="/reviews.html" class="btn btn-ghost">Read all reviews →</a>
+  </div>
+</section>
+
+<!-- Mascot / Nutrition Section -->
+<section class="mascot-section">
+  <div class="mascot-grid">
+    <div class="mascot-art-wrap">
+      <!-- Nutty the Peanut Mascot SVG -->
+      <svg viewBox="0 0 320 420" width="280" height="370" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="pb" cx="42%" cy="30%" r="62%">
+            <stop offset="0%" stop-color="#f0c060"/>
+            <stop offset="55%" stop-color="#d99846"/>
+            <stop offset="100%" stop-color="#a8682a"/>
+          </radialGradient>
+          <pattern id="bumps" patternUnits="userSpaceOnUse" width="14" height="14">
+            <circle cx="3" cy="3" r="1.2" fill="#5a2f10" opacity="0.35"/>
+            <circle cx="10" cy="9" r="0.9" fill="#5a2f10" opacity="0.28"/>
+          </pattern>
+        </defs>
+        <!-- Speech bubble -->
+        <g transform="translate(168,10)">
+          <path d="M0 20 Q0 0 20 0 L110 0 Q130 0 130 20 L130 58 Q130 78 110 78 L40 78 L20 98 L24 78 Q0 78 0 58 Z" fill="#fff" stroke="#2a1608" stroke-width="3"/>
+          <text x="65" y="34" text-anchor="middle" style="font-family:'Bagel Fat One',cursive;font-size:13px;fill:#5b2a8a">HI, I'M</text>
+          <text x="65" y="58" text-anchor="middle" style="font-family:'Bagel Fat One',cursive;font-size:20px;fill:#f57e2a">NUTTY!</text>
+        </g>
+        <!-- Peanut body -->
+        <g transform="translate(60,105)">
+          <path d="M100 0 C158 0 188 38 178 82 C174 100 158 112 144 124 C160 138 178 152 182 180 C188 232 152 270 100 270 C48 270 12 232 18 180 C22 152 40 138 56 124 C42 112 26 100 22 82 C12 38 42 0 100 0 Z" fill="url(#pb)" stroke="#2a1608" stroke-width="3.5"/>
+          <path d="M100 0 C158 0 188 38 178 82 C174 100 158 112 144 124 C160 138 178 152 182 180 C188 232 152 270 100 270 C48 270 12 232 18 180 C22 152 40 138 56 124 C42 112 26 100 22 82 C12 38 42 0 100 0 Z" fill="url(#bumps)"/>
+          <path d="M56 124 Q100 110 144 124" stroke="#2a1608" stroke-width="2.5" fill="none" opacity="0.55"/>
+          <ellipse cx="68" cy="40" rx="18" ry="26" fill="#fff" opacity="0.3"/>
+          <!-- Leaf on top -->
+          <g transform="translate(118,-6) rotate(20)">
+            <path d="M0 0 Q14 -10 22 0 Q14 4 0 0 Z" fill="#e8b62a" stroke="#2a1608" stroke-width="2"/>
+          </g>
+          <!-- Eyes -->
+          <ellipse cx="78" cy="180" rx="9" ry="11" fill="#fff" stroke="#2a1608" stroke-width="2.5"/>
+          <ellipse cx="122" cy="180" rx="9" ry="11" fill="#fff" stroke="#2a1608" stroke-width="2.5"/>
+          <circle cx="80" cy="183" r="4.5" fill="#2a1608"/>
+          <circle cx="124" cy="183" r="4.5" fill="#2a1608"/>
+          <circle cx="82" cy="181" r="1.5" fill="#fff"/>
+          <circle cx="126" cy="181" r="1.5" fill="#fff"/>
+          <!-- Eyebrows -->
+          <path d="M68 166 Q78 162 88 166" stroke="#2a1608" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M112 166 Q122 162 132 166" stroke="#2a1608" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Blush -->
+          <ellipse cx="62" cy="200" rx="9" ry="5" fill="#f57e2a" opacity="0.55"/>
+          <ellipse cx="138" cy="200" rx="9" ry="5" fill="#f57e2a" opacity="0.55"/>
+          <!-- Smile -->
+          <path d="M78 208 Q100 228 122 208 Q100 218 78 208 Z" fill="#7a1d12" stroke="#2a1608" stroke-width="2.5"/>
+          <path d="M84 211 L116 211" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+          <!-- Arms -->
+          <path d="M18 150 C-6 156 -16 178 -8 200 C-2 214 8 218 18 214" fill="url(#pb)" stroke="#2a1608" stroke-width="3"/>
+          <path d="M182 150 C206 156 216 178 208 200 C202 214 192 218 182 214" fill="url(#pb)" stroke="#2a1608" stroke-width="3"/>
+          <!-- Spoon -->
+          <g transform="translate(196,196) rotate(28)">
+            <rect x="-2" y="0" width="4" height="40" rx="2" fill="#cfa55a" stroke="#2a1608" stroke-width="2"/>
+            <ellipse cx="0" cy="-10" rx="13" ry="10" fill="#cfa55a" stroke="#2a1608" stroke-width="2.5"/>
+            <ellipse cx="0" cy="-12" rx="8" ry="5.5" fill="#7a4a1c"/>
+          </g>
+          <!-- Feet -->
+          <ellipse cx="72" cy="270" rx="22" ry="9" fill="#2a1608"/>
+          <ellipse cx="128" cy="270" rx="22" ry="9" fill="#2a1608"/>
+        </g>
+        <!-- Shadow -->
+        <ellipse cx="160" cy="382" rx="96" ry="8" fill="#000" opacity="0.15"/>
+      </svg>
+    </div>
+    <div class="mascot-copy">
+      <div class="eyebrow"><span class="dot" style="background:var(--orange);border-color:#fff;"></span>Nutrition Facts</div>
+      <h2 class="section-title">What's actually inside.</h2>
+      <p class="mascot-intro">Per 100g of Classic Smooth. No fluff. Just numbers you can feel good about.</p>
+      <div class="chart-list">
+        <div class="chart-row">
+          <span class="chart-label">Protein</span>
+          <div class="chart-bar-wrap"><div class="chart-bar" style="width:72%;background:var(--orange);"></div></div>
+          <span class="chart-val">25g</span>
+        </div>
+        <div class="chart-row">
+          <span class="chart-label">Healthy Fat</span>
+          <div class="chart-bar-wrap"><div class="chart-bar" style="width:88%;background:var(--honey);"></div></div>
+          <span class="chart-val">51g</span>
+        </div>
+        <div class="chart-row">
+          <span class="chart-label">Fibre</span>
+          <div class="chart-bar-wrap"><div class="chart-bar" style="width:28%;background:var(--leaf);"></div></div>
+          <span class="chart-val">6g</span>
+        </div>
+        <div class="chart-row">
+          <span class="chart-label">Carbs</span>
+          <div class="chart-bar-wrap"><div class="chart-bar" style="width:18%;background:rgba(255,255,255,0.5);"></div></div>
+          <span class="chart-val">13g</span>
+        </div>
+        <div class="chart-row">
+          <span class="chart-label">Calories</span>
+          <div class="chart-bar-wrap"><div class="chart-bar" style="width:82%;background:var(--tomato);"></div></div>
+          <span class="chart-val">597</span>
+        </div>
+      </div>
+      <div class="mascot-tags">
+        <span class="m-tag">✅ No Palm Oil</span>
+        <span class="m-tag">🚫 No Added Sugar</span>
+        <span class="m-tag">🌿 Non-GMO</span>
+        <span class="m-tag">💪 High Protein</span>
+        <span class="m-tag">🌾 Gluten Free</span>
+        <span class="m-tag">🧂 Just Peanuts + Salt</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter">
+  <div class="news-inner">
+    <div class="eyebrow"><span class="dot"></span>Newsletter</div>
+    <h2 class="section-title">Get peanut updates.</h2>
+    <p>Recipes, restocks, and exclusive deals — straight to your inbox. No spam. Ever.</p>
+    <form class="news-form" id="news-form">
+      <input type="email" placeholder="your@email.com" id="news-email" required />
+      <button type="submit" class="btn btn-primary">Subscribe →</button>
+    </form>
+    <div class="news-done" id="news-done">🥜 You're in! Check your inbox.</div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="/js/main.js"></script>
+<script>
+// ── Hero slideshow ──────────────────────────────────────────────────────────
+const slides = [
+  { eyebrow: "NEW · LAUNCH WEEK", title: "Spread<br>the joy.", sub: "Stone-ground peanut butter. No palm oil. No junk. Just peanuts.", jar: "/images/jar-classic.png" },
+  { eyebrow: "BACK IN STOCK", title: "Chocolate,<br>but make it real.", sub: "Cocoa & peanuts only. Zero shortcuts.", jar: "/images/jar-choco.png" },
+  { eyebrow: "KIDS' FAVORITE", title: "Choc-chip<br>in a jar.", sub: "Real chocolate chips folded in. Mom-approved.", jar: "/images/jar-chocoChip.png" },
+  { eyebrow: "GYM OBSESSED", title: "32g<br>protein.", sub: "The Protein+ jar. For those who never skip leg day.", jar: "/images/jar-crunchy.png" },
+];
+let currentSlide = 0;
+let slideInterval;
+
+function goToSlide(i) {
+  currentSlide = i;
+  const s = slides[i];
+  document.getElementById('hero-eyebrow').textContent = s.eyebrow;
+  document.getElementById('hero-title').innerHTML = s.title;
+  document.getElementById('hero-sub').textContent = s.sub;
+  const img = document.getElementById('hero-jar-img');
+  img.style.opacity = '0';
+  setTimeout(() => { img.src = s.jar; img.style.opacity = '1'; }, 180);
+  document.querySelectorAll('.hero-dot').forEach((d, idx) => d.classList.toggle('active', idx === i));
+}
+
+function initSlideshow() {
+  const dotsEl = document.getElementById('hero-dots');
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'hero-dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => { goToSlide(i); resetInterval(); });
+    dotsEl.appendChild(d);
+  });
+  resetInterval();
+}
+function resetInterval() {
+  clearInterval(slideInterval);
+  slideInterval = setInterval(() => goToSlide((currentSlide + 1) % slides.length), 4000);
+}
+initSlideshow();
+
+// ── Load hot products ────────────────────────────────────────────────────────
+async function loadHotProducts() {
+  const track = document.getElementById('hot-track');
+  try {
+    const res = await fetch('/api/products/hot');
+    const { data } = await res.json();
+    track.innerHTML = data.map(p => `
+      <div class="hot-card product-card">
+        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+        <a href="/product.html?id=${p.id}" style="text-decoration:none;">
+          <div class="product-img" style="background:none;border:none;box-shadow:none;">
+            ${jarImg(p.flavor, 170, p.name)}
+          </div>
+        </a>
+        <div class="product-stars">${renderStars(p.reviews)}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-size">${p.size}</div>
+        <div class="product-price-row">
+          <span class="product-orig">${formatPrice(p.original)}</span>
+          <span class="product-sale">${formatPrice(p.price)}</span>
+        </div>
+        <button class="product-add" onclick="handleAddToCart('${p.id}', this)">Add to Cart</button>
+      </div>`).join('');
+  } catch(e) {
+    track.innerHTML = '<p style="padding:20px;color:var(--ink-soft)">Could not load products.</p>';
+  }
+}
+loadHotProducts();
+
+// Arrow scroll
+document.getElementById('arr-left').addEventListener('click', () => {
+  document.getElementById('hot-track').scrollBy({ left: -310, behavior: 'smooth' });
+});
+document.getElementById('arr-right').addEventListener('click', () => {
+  document.getElementById('hot-track').scrollBy({ left: 310, behavior: 'smooth' });
+});
+
+// ── Load reviews ──────────────────────────────────────────────────────────────
+async function loadHomeReviews() {
+  const grid = document.getElementById('reviews-home-grid');
+  try {
+    const res = await fetch('/api/reviews');
+    const { data } = await res.json();
+    grid.innerHTML = data.slice(0, 4).map(r => `
+      <div class="review-card">
+        <div class="review-stars">${'★'.repeat(r.stars)}</div>
+        <p class="review-text">"${r.text}"</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:${r.avatarColor}">${r.avatar}</div>
+          <div>
+            <div class="review-name">${r.name}</div>
+            <div class="review-role">${r.role}</div>
+          </div>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    grid.innerHTML = '';
+  }
+}
+loadHomeReviews();
+
+// ── Bundle Deals ─────────────────────────────────────────────────────────────
+const bundleTaglines = {
+  'bundle-starter': 'Perfect intro. Two bestsellers, one great price.',
+  'bundle-gym':     'Fuel every session. 3 jars · 45-day supply.',
+  'bundle-choco':   'For the chocolate lovers in every household.',
+  'bundle-family':  '4 flavors. Never get bored. Enough for the whole family.'
+};
+
+async function loadBundles() {
+  const grid = document.getElementById('bundles-grid');
+  try {
+    const res = await fetch('/api/bundles');
+    const { data } = await res.json();
+    grid.innerHTML = data.map(b => {
+      const jarImgs = b.itemFlavors.map((f, i) =>
+        `<img src="/images/jar-${f}.png" alt="${f} peanut butter" style="width:${b.itemFlavors.length > 3 ? 52 : 64}px;height:${b.itemFlavors.length > 3 ? 52 : 64}px;object-fit:contain;filter:drop-shadow(0 5px 10px rgba(0,0,0,0.2));margin:0 -5px;${i===Math.floor(b.itemFlavors.length/2)?'transform:translateY(-10px)':''}" />`
+      ).join('');
+      const saving = Math.round((1 - b.price / b.original) * 100);
+      return `
+      <div class="bundle-card${b.highlight ? ' highlight' : ''}">
+        ${b.badge ? `<div class="bundle-badge">${b.badge}</div>` : ''}
+        <div class="bundle-jars" style="min-height:90px;display:flex;justify-content:center;align-items:flex-end;gap:0;margin-bottom:18px;position:relative;">
+          ${jarImgs}
+          <div class="bundle-jars-count">${b.itemFlavors.length} jars</div>
+        </div>
+        <div class="bundle-name">${b.name}</div>
+        <div class="bundle-tagline">${bundleTaglines[b.id] || ''}</div>
+        <div class="bundle-pricing">
+          <span class="bundle-price">${formatPrice(b.price)}</span>
+          <span class="bundle-orig">${formatPrice(b.original)}</span>
+        </div>
+        <div class="bundle-saving">🎉 You save ${formatPrice(b.saving)} (${saving}% off)</div>
+        <button class="btn-bundle" onclick="handleBundleCart('${b.id}', ${JSON.stringify(b.itemFlavors)}, this)">
+          Get This Bundle →
+        </button>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    grid.innerHTML = '<p style="padding:20px;color:var(--ink-soft)">Could not load bundles.</p>';
+  }
+}
+loadBundles();
+
+async function handleBundleCart(bundleId, flavors, btn) {
+  btn.disabled = true;
+  btn.textContent = 'Adding…';
+  try {
+    const { data: products } = await (await fetch('/api/products')).json();
+    const results = await Promise.all(flavors.map(async flavor => {
+      const product = products.find(p => p.slug === flavor && p.size === '500g') || products.find(p => p.slug === flavor);
+      if (!product) return null;
+      return Cart.add(product.id, 1);
+    }));
+    const allOk = results.every(r => r && r.success);
+    if (allOk) {
+      showToast('🥜 Bundle added to cart!');
+      refreshCartBadge();
+      btn.textContent = 'Added! 🎉';
+      btn.classList.add('added');
+      setTimeout(() => { btn.textContent = 'Get This Bundle →'; btn.classList.remove('added'); btn.disabled = false; }, 2200);
+    } else {
+      showToast('Something went wrong. Try again.');
+      btn.disabled = false; btn.textContent = 'Get This Bundle →';
+    }
+  } catch(e) {
+    showToast('Network error. Try again.');
+    btn.disabled = false; btn.textContent = 'Get This Bundle →';
+  }
+}
+
+// ── Newsletter ────────────────────────────────────────────────────────────────
+document.getElementById('news-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('news-email').value;
+  const btn = e.target.querySelector('button');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/newsletter', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    document.getElementById('news-form').style.display = 'none';
+    document.getElementById('news-done').style.display = 'block';
+    document.getElementById('news-done').textContent = '🥜 ' + data.message;
+  } catch(e) {
+    btn.disabled = false;
+    showToast('Something went wrong. Try again.');
+  }
+});
+</script>
+</body>
+</html>

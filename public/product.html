@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Product — NUTYBLISS</title>
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+.product-layout {
+  max-width: 1200px; margin: 0 auto; padding: 56px 32px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;
+}
+
+/* Product visual */
+.product-visual { position: sticky; top: 100px; }
+.product-stage {
+  position: relative; height: 440px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--paper); border: 2.5px solid var(--ink); border-radius: 28px;
+  box-shadow: 6px 6px 0 var(--ink); overflow: hidden;
+}
+.product-stage::before {
+  content: ""; position: absolute; width: 380px; height: 380px; border-radius: 50%;
+  background: var(--orange); opacity: 0.12; top: 50%; left: 50%; transform: translate(-50%,-50%);
+}
+@keyframes float { 0%,100%{transform:translateY(0)rotate(0);} 50%{transform:translateY(-12px)rotate(1deg);} }
+.big-jar-lid-top {
+  position: absolute; top: 0; left: 0; right: 0; height: 52px;
+  border-radius: 16px 16px 0 0; border-bottom: 4px solid var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bagel Fat One', cursive; font-size: 12px; letter-spacing: 2px; color: #fff;
+}
+.big-jar-label-box {
+  background: var(--paper); border: 3px solid var(--ink); border-radius: 10px;
+  padding: 10px 16px; text-align: center; box-shadow: 2px 2px 0 var(--ink);
+  position: relative; z-index: 1;
+}
+.big-jar-label-name { font-family: 'Bagel Fat One', cursive; font-size: 16px; color: var(--purple); line-height: 1.1; }
+.big-jar-label-desc { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; color: var(--ink-soft); text-transform: uppercase; margin-top: 2px; }
+.big-jar-emoji-big { font-size: 44px; margin-bottom: 8px; }
+.stage-badge {
+  position: absolute; top: 16px; left: 16px;
+  background: var(--tomato); color: #fff; font-family: 'Bagel Fat One', cursive;
+  font-size: 13px; padding: 5px 14px; border-radius: 999px; border: 2px solid var(--ink);
+  transform: rotate(-8deg); box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* Thumbnails */
+.product-thumbs { display: flex; gap: 10px; margin-top: 14px; justify-content: center; }
+.thumb {
+  width: 54px; height: 54px; border-radius: 12px; border: 2.5px solid var(--ink);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 20px; box-shadow: 2px 2px 0 var(--ink); transition: all 0.15s;
+  background: var(--paper);
+}
+.thumb.active, .thumb:hover { border-color: var(--orange); box-shadow: 3px 3px 0 var(--orange); }
+
+/* Product info */
+.product-info {}
+.product-info-name { font-family: 'Bagel Fat One', cursive; font-size: clamp(36px, 4vw, 56px); color: var(--purple); line-height: 1; margin: 10px 0 6px; }
+.product-info-tagline { font-size: 16px; font-weight: 600; color: var(--ink-soft); margin-bottom: 14px; }
+.product-info-stars { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.stars-big { color: var(--honey); font-size: 20px; letter-spacing: 1px; }
+.stars-count { font-family: 'Fredoka', sans-serif; font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+
+/* Size picker */
+.size-picker { margin-bottom: 20px; }
+.size-picker-label { font-family: 'Fredoka', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 10px; }
+.size-options { display: flex; gap: 10px; flex-wrap: wrap; }
+.size-opt {
+  padding: 10px 20px; border-radius: 12px; border: 2.5px solid var(--ink);
+  background: var(--bg); font-family: 'Fredoka', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s; position: relative;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.size-opt:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--ink); }
+.size-opt.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+.size-opt .popular-tag {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  background: var(--orange); color: #fff; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.5px; padding: 2px 8px; border-radius: 999px;
+  border: 1.5px solid var(--ink); white-space: nowrap;
+}
+.size-price-display { margin-top: 12px; display: flex; align-items: baseline; gap: 10px; }
+.price-big { font-family: 'Bagel Fat One', cursive; font-size: 40px; color: var(--orange); }
+.price-orig { font-size: 18px; font-weight: 600; text-decoration: line-through; color: var(--ink-soft); }
+.price-save { background: var(--leaf); color: #fff; font-family: 'Fredoka', sans-serif;
+  font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; border: 1.5px solid var(--ink); }
+
+/* CTA row */
+.cta-row { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.qty-picker { display: flex; align-items: center; border: 2.5px solid var(--ink); border-radius: 12px; overflow: hidden; box-shadow: 2px 2px 0 var(--ink); }
+.qty-pick-btn { width: 40px; height: 48px; background: var(--bg); border: none; font-size: 20px; font-weight: 700; cursor: pointer; transition: background 0.1s; }
+.qty-pick-btn:hover { background: var(--orange); color: #fff; }
+.qty-pick-num { width: 44px; text-align: center; font-family: 'Bagel Fat One', cursive; font-size: 18px; border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); height: 48px; display: flex; align-items: center; justify-content: center; }
+.add-cart-big { flex: 1; min-width: 180px; padding: 14px 24px; background: var(--purple); color: #fff; border: 2.5px solid var(--ink); border-radius: 12px; font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); transition: all 0.15s; }
+.add-cart-big:hover { background: var(--orange); transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--ink); }
+.add-cart-big.added { background: var(--leaf); }
+
+/* Trust row */
+.trust-mini { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 24px; }
+.trust-mini-item { display: flex; align-items: center; gap: 6px; font-family: 'Fredoka', sans-serif; font-size: 12px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.5px; }
+.trust-mini-item span:first-child { font-size: 16px; }
+
+/* Tabs */
+.product-tabs { margin-top: 32px; }
+.tab-bar { display: flex; gap: 0; border: 2.5px solid var(--ink); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+.tab-btn { flex: 1; padding: 12px; background: var(--bg); border: none; border-right: 2px solid var(--ink); font-family: 'Fredoka', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: background 0.15s; }
+.tab-btn:last-child { border-right: none; }
+.tab-btn.active { background: var(--purple); color: #fff; }
+.tab-panel { display: none; background: var(--paper); border: 2.5px solid var(--ink); border-radius: 16px; padding: 24px; box-shadow: 3px 3px 0 var(--ink); }
+.tab-panel.active { display: block; }
+
+/* Nutrition table */
+.nutr-table { width: 100%; border-collapse: collapse; }
+.nutr-table tr { border-bottom: 1.5px solid rgba(42,22,8,0.1); }
+.nutr-table tr:last-child { border-bottom: none; }
+.nutr-table td { padding: 10px 4px; font-family: 'Fredoka', sans-serif; font-size: 14px; font-weight: 600; }
+.nutr-table td:last-child { text-align: right; font-family: 'Bagel Fat One', cursive; font-size: 16px; color: var(--orange); }
+.nutr-per { font-size: 11px; font-weight: 700; color: var(--ink-soft); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; }
+
+/* Tags row */
+.tags-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+
+/* Related */
+.related-section { background: var(--bg-2); border-top: 3px solid var(--ink); padding: 72px 32px; }
+.related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 22px; max-width: 1200px; margin: 0 auto; }
+
+@media (max-width: 900px) {
+  .product-layout { grid-template-columns: 1fr; gap: 32px; }
+  .product-visual { position: static; }
+}
+@media (max-width: 600px) {
+  .product-layout { padding: 32px 16px; }
+  .related-section { padding: 48px 16px; }
+}
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+
+<!-- Breadcrumb -->
+<div style="background:var(--paper);border-bottom:2px solid rgba(42,22,8,0.1);padding:12px 32px;">
+  <div style="max-width:1200px;margin:0 auto;font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600;color:var(--ink-soft);">
+    <a href="/index.html" style="color:var(--ink-soft);">Home</a> &nbsp;/&nbsp;
+    <a href="/shop.html" style="color:var(--ink-soft);">Shop</a> &nbsp;/&nbsp;
+    <span id="breadcrumb-name" style="color:var(--purple);">Loading…</span>
+  </div>
+</div>
+
+<!-- Product layout -->
+<div class="product-layout" id="product-layout">
+  <div class="spinner" style="grid-column:1/-1;"></div>
+</div>
+
+<!-- Related products -->
+<section class="related-section" id="related-section" style="display:none;">
+  <div style="max-width:1200px;margin:0 auto 36px;">
+    <div class="eyebrow"><span class="dot"></span>You Might Also Love</div>
+    <h2 class="section-title">More bliss awaits.</h2>
+  </div>
+  <div class="related-grid" id="related-grid"></div>
+</section>
+
+<div id="site-footer"></div>
+<script src="/js/main.js"></script>
+<script>
+let product = null;
+let variants = [];
+let selectedVariant = null;
+let qty = 1;
+
+const params = new URLSearchParams(window.location.search);
+const productId = params.get('id');
+
+async function loadProduct() {
+  if (!productId) { window.location.href = '/shop.html'; return; }
+  try {
+    const res = await fetch(`/api/products/${productId}`);
+    const data = await res.json();
+    if (!data.success) { window.location.href = '/shop.html'; return; }
+    product  = data.data;
+    variants = data.variants;
+    selectedVariant = product;
+    document.title = product.name + ' — NUTYBLISS';
+    document.getElementById('breadcrumb-name').textContent = product.name;
+    renderProduct();
+    loadRelated();
+  } catch(e) {
+    document.getElementById('product-layout').innerHTML = '<p style="padding:20px;color:var(--ink-soft)">Could not load product.</p>';
+  }
+}
+
+function renderProduct() {
+  const p = selectedVariant;
+  const savePct = Math.round((1 - p.price / p.original) * 100);
+
+  document.getElementById('product-layout').innerHTML = `
+    <!-- Visual -->
+    <div class="product-visual">
+      <div class="product-stage">
+        ${p.badge ? `<div class="stage-badge">${p.badge}</div>` : ''}
+        <img id="main-jar-img"
+          src="/images/jar-${p.flavor === 'protein' ? 'classic' : p.flavor}.png"
+          alt="${p.name}"
+          style="width:280px;height:300px;object-fit:contain;filter:drop-shadow(0 16px 32px rgba(0,0,0,0.22));animation:float 4s ease-in-out infinite;position:relative;z-index:2;" />
+      </div>
+      <div class="product-thumbs">
+        ${variants.map(v => `
+          <div class="thumb ${v.id === p.id ? 'active' : ''}" onclick="selectVariant('${v.id}')"
+               style="font-family:'Fredoka',sans-serif;font-size:11px;font-weight:700;color:var(--ink-soft);">
+            ${v.size}
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="product-info">
+      <div class="eyebrow"><span class="dot"></span>${p.flavor.toUpperCase()} RANGE</div>
+      <h1 class="product-info-name">${p.name}</h1>
+      <p class="product-info-tagline">${p.tagline}</p>
+
+      <div class="product-info-stars">
+        <span class="stars-big">${'★'.repeat(Math.round(p.reviews))}</span>
+        <span class="stars-count">${p.reviews} · ${p.reviewCount.toLocaleString()} reviews</span>
+        <a href="/reviews.html" style="font-family:'Fredoka',sans-serif;font-size:12px;font-weight:700;color:var(--orange);text-decoration:underline;">Read reviews →</a>
+      </div>
+
+      <!-- Size picker -->
+      <div class="size-picker">
+        <div class="size-picker-label">Choose size</div>
+        <div class="size-options" id="size-options">
+          ${variants.map(v => `
+            <div class="size-opt ${v.id === p.id ? 'active' : ''}" onclick="selectVariant('${v.id}')">
+              ${v.popular ? '<span class="popular-tag">POPULAR</span>' : ''}
+              ${v.size}
+            </div>`).join('')}
+        </div>
+        <div class="size-price-display" id="price-display">
+          <span class="price-big">${formatPrice(p.price)}</span>
+          <span class="price-orig">${formatPrice(p.original)}</span>
+          <span class="price-save">Save ${savePct}%</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-row">
+        <div class="qty-picker">
+          <button class="qty-pick-btn" onclick="changeQty(-1)">−</button>
+          <span class="qty-pick-num" id="qty-display">${qty}</span>
+          <button class="qty-pick-btn" onclick="changeQty(1)">+</button>
+        </div>
+        <button class="add-cart-big" id="add-btn" onclick="addToCart()">🛒 Add to Cart</button>
+      </div>
+      <a href="/cart.html" class="btn btn-ghost btn-full" style="margin-bottom:20px;">View Cart →</a>
+
+      <!-- Trust mini -->
+      <div class="trust-mini">
+        <div class="trust-mini-item"><span>🚚</span> Free ship Rs.1,999+</div>
+        <div class="trust-mini-item"><span>↩️</span> 7-day returns</div>
+        <div class="trust-mini-item"><span>✅</span> PSQCA certified</div>
+        <div class="trust-mini-item"><span>🌱</span> Non-GMO</div>
+      </div>
+
+      <!-- Tags -->
+      <div class="tags-row">
+        ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+      </div>
+
+      <!-- Tabs -->
+      <div class="product-tabs">
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="openTab('desc',this)">Description</button>
+          <button class="tab-btn" onclick="openTab('nutr',this)">Nutrition</button>
+          <button class="tab-btn" onclick="openTab('ingr',this)">Ingredients</button>
+        </div>
+        <div class="tab-panel active" id="tab-desc">
+          <p style="font-size:15px;font-weight:500;color:var(--ink-soft);line-height:1.65;margin:0;">${p.description}</p>
+        </div>
+        <div class="tab-panel" id="tab-nutr">
+          <div class="nutr-per">Per 100g serving</div>
+          <table class="nutr-table">
+            <tr><td>Protein</td><td>${p.nutrition.protein}</td></tr>
+            <tr><td>Total Fat</td><td>${p.nutrition.fat}</td></tr>
+            <tr><td>Carbohydrates</td><td>${p.nutrition.carbs}</td></tr>
+            <tr><td>Dietary Fiber</td><td>${p.nutrition.fiber}</td></tr>
+            <tr><td>Calories</td><td>${p.nutrition.calories}</td></tr>
+          </table>
+        </div>
+        <div class="tab-panel" id="tab-ingr">
+          <p style="font-size:15px;font-weight:500;color:var(--ink);line-height:1.65;margin:0 0 12px;">${p.ingredients}</p>
+          <p style="font-size:12px;font-weight:600;color:var(--ink-soft);">That's it. No hidden extras. What you see is what you eat.</p>
+        </div>
+      </div>
+    </div>`;
+}
+
+function openTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function selectVariant(variantId) {
+  selectedVariant = variants.find(v => v.id === variantId) || product;
+  const savePct = Math.round((1 - selectedVariant.price / selectedVariant.original) * 100);
+  document.querySelectorAll('.size-opt').forEach(o => o.classList.toggle('active', o.onclick.toString().includes(variantId)));
+  document.getElementById('price-display').innerHTML = `
+    <span class="price-big">${formatPrice(selectedVariant.price)}</span>
+    <span class="price-orig">${formatPrice(selectedVariant.original)}</span>
+    <span class="price-save">Save ${savePct}%</span>`;
+  // Update jar image
+  const jarEl = document.getElementById('main-jar-img');
+  const flavor = selectedVariant.flavor === 'protein' ? 'classic' : selectedVariant.flavor;
+  jarEl.style.opacity = '0';
+  setTimeout(() => { jarEl.src = `/images/jar-${flavor}.png`; jarEl.style.opacity = '1'; }, 150);
+  jarEl.style.transition = 'opacity 0.2s';
+}
+
+function changeQty(delta) {
+  qty = Math.max(1, qty + delta);
+  document.getElementById('qty-display').textContent = qty;
+}
+
+async function addToCart() {
+  const btn = document.getElementById('add-btn');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const data = await Cart.add(selectedVariant.id, qty);
+    if (data.success) {
+      showToast('🥜 Added to cart!');
+      refreshCartBadge();
+      btn.textContent = '✓ Added!';
+      btn.classList.add('added');
+      setTimeout(() => { btn.textContent = '🛒 Add to Cart'; btn.classList.remove('added'); btn.disabled = false; }, 1800);
+    } else {
+      btn.disabled = false; btn.textContent = '🛒 Add to Cart';
+    }
+  } catch(e) {
+    btn.disabled = false; btn.textContent = '🛒 Add to Cart';
+    showToast('Network error. Try again.');
+  }
+}
+
+async function loadRelated() {
+  try {
+    const res = await fetch('/api/products');
+    const { data } = await res.json();
+    const related = data.filter(p => p.id !== productId && p.slug !== product.slug && p.popular !== false).slice(0, 4);
+    if (!related.length) return;
+    document.getElementById('related-section').style.display = 'block';
+    document.getElementById('related-grid').innerHTML = related.map(p => `
+      <div class="product-card">
+        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+        <a href="/product.html?id=${p.id}" style="text-decoration:none;">
+          <div class="product-img" style="background:none;border:none;box-shadow:none;">
+            ${jarImg(p.flavor, 160, p.name)}
+          </div>
+        </a>
+        <div class="product-stars">${renderStars(p.reviews)}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-size">${p.size}</div>
+        <div class="product-price-row">
+          <span class="product-orig">${formatPrice(p.original)}</span>
+          <span class="product-sale">${formatPrice(p.price)}</span>
+        </div>
+        <button class="product-add" onclick="handleAddToCart('${p.id}', this)">Add to Cart</button>
+      </div>`).join('');
+  } catch(e) {}
+}
+
+loadProduct();
+</script>
+</body>
+</html>

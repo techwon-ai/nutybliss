@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shop — NUTYBLISS</title>
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+.shop-hero {
+  background: var(--purple); color: #fff;
+  border-bottom: 3px solid var(--ink);
+  padding: 56px 32px;
+  position: relative; overflow: hidden;
+}
+.shop-hero::before {
+  content: ""; position: absolute;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: var(--orange); top: -150px; right: -100px; opacity: 0.3;
+}
+.shop-hero-inner { position: relative; z-index: 2; max-width: 1300px; margin: 0 auto; }
+.shop-hero h1 { font-family: 'Bagel Fat One', cursive; font-size: clamp(48px,6vw,88px); color: #fff; text-shadow: 4px 4px 0 var(--orange); margin: 10px 0 14px; }
+.shop-hero p  { font-size: 18px; font-weight: 500; opacity: 0.9; max-width: 500px; }
+
+/* Filter bar */
+.filter-bar {
+  background: var(--paper); border-bottom: 3px solid var(--ink);
+  padding: 20px 32px; position: sticky; top: 71px; z-index: 40;
+}
+.filter-inner { max-width: 1300px; margin: 0 auto; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.filter-chip {
+  padding: 8px 18px; border-radius: 999px;
+  border: 2.5px solid var(--ink); background: var(--bg);
+  font-family: 'Fredoka', sans-serif; font-size: 13px; font-weight: 700;
+  letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer;
+  transition: all 0.15s; box-shadow: 2px 2px 0 var(--ink);
+}
+.filter-chip:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--ink); }
+.filter-chip.active { background: var(--purple); color: #fff; }
+.filter-label { font-family: 'Fredoka', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-soft); margin-right: 4px; }
+.filter-sep { width: 1px; height: 28px; background: var(--ink); opacity: 0.2; margin: 0 6px; }
+
+/* Products grid */
+.shop-body { max-width: 1300px; margin: 0 auto; padding: 56px 32px; }
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px; }
+.products-count { font-family: 'Fredoka', sans-serif; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.8px; }
+
+/* Detail link */
+.product-card .product-detail-link {
+  font-family: 'Fredoka', sans-serif; font-size: 12px; font-weight: 600;
+  color: var(--purple); text-decoration: none; letter-spacing: 0.5px;
+  margin-top: 6px; display: block; transition: color 0.15s;
+}
+.product-card .product-detail-link:hover { color: var(--orange); }
+
+/* Size selector */
+.size-pills { display: flex; gap: 6px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap; }
+.size-pill {
+  padding: 4px 12px; border-radius: 999px;
+  border: 2px solid var(--ink); background: var(--bg);
+  font-family: 'Fredoka', sans-serif; font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: all 0.12s;
+}
+.size-pill.active { background: var(--orange); color: #fff; }
+.size-pill:hover  { background: var(--purple); color: #fff; }
+
+@media (max-width: 600px) {
+  .shop-body { padding: 32px 16px; }
+  .filter-bar { padding: 14px 16px; }
+}
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+
+<div class="shop-hero">
+  <div class="shop-hero-inner">
+    <div class="eyebrow" style="color:var(--orange);"><span class="dot" style="background:var(--orange);border-color:#fff;"></span>Our Range</div>
+    <h1>Pick your bliss.</h1>
+    <p>Five flavors. Zero junk. One obsession.</p>
+  </div>
+</div>
+
+<!-- Filter bar -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <span class="filter-label">Flavor:</span>
+    <button class="filter-chip active" data-flavor="all">All</button>
+    <button class="filter-chip" data-flavor="classic">Classic</button>
+    <button class="filter-chip" data-flavor="crunchy">Crunchy</button>
+    <button class="filter-chip" data-flavor="choco">Choco</button>
+    <button class="filter-chip" data-flavor="chocoChip">Choc-Chip</button>
+    <button class="filter-chip" data-flavor="honey">Honey</button>
+    <button class="filter-chip" data-flavor="protein">Protein+</button>
+  </div>
+</div>
+
+<!-- Products -->
+<div class="shop-body">
+  <div class="products-count" id="products-count"></div>
+  <div class="products-grid" id="products-grid">
+    <div class="spinner" style="grid-column:1/-1;"></div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script src="/js/main.js"></script>
+<script>
+let allProducts = [];
+let activeFilter = 'all';
+
+// Pre-select flavor from URL param
+const urlParams = new URLSearchParams(window.location.search);
+const preFilter = urlParams.get('flavor');
+if (preFilter) activeFilter = preFilter;
+
+async function loadProducts() {
+  try {
+    const res = await fetch('/api/products');
+    const { data } = await res.json();
+    allProducts = data;
+    renderProducts();
+  } catch(e) {
+    document.getElementById('products-grid').innerHTML = '<p style="color:var(--ink-soft);padding:20px">Could not load products.</p>';
+  }
+}
+
+function renderProducts() {
+  const filtered = activeFilter === 'all' ? allProducts : allProducts.filter(p => p.slug === activeFilter);
+  const grid = document.getElementById('products-grid');
+  const count = document.getElementById('products-count');
+  count.textContent = filtered.length + ' product' + (filtered.length !== 1 ? 's' : '');
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🥜</div><h3>No jars here!</h3><p>Try a different filter.</p></div>`;
+    return;
+  }
+
+  // Group by slug for size pills
+  const bySlug = {};
+  filtered.forEach(p => { if (!bySlug[p.slug]) bySlug[p.slug] = []; bySlug[p.slug].push(p); });
+
+  // Show one card per product group (first = default) with size pills
+  const rendered = new Set();
+  grid.innerHTML = filtered.map(p => {
+    const slug = p.slug;
+    // Only create one card per slug unless different flavor
+    const key = slug;
+    const isFirst = !rendered.has(key);
+    rendered.add(key);
+    if (!isFirst) return '';
+
+    const variants = bySlug[slug] || [p];
+    const sizePills = variants.length > 1 ? `
+      <div class="size-pills" id="pills-${slug}">
+        ${variants.map((v,i) => `<button class="size-pill ${i===0?'active':''}" data-product-id="${v.id}" onclick="selectSize(this, '${slug}')">${v.size}</button>`).join('')}
+      </div>` : `<div class="product-size">${p.size}</div>`;
+
+    return `
+      <div class="product-card" id="card-${slug}">
+        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+        <a href="/product.html?id=${p.id}" style="text-decoration:none;">
+          <div class="product-img" style="background:none;border:none;box-shadow:none;">
+            ${jarImg(p.flavor, 180, p.name)}
+          </div>
+        </a>
+        <div class="product-stars">${renderStars(p.reviews)} <span style="font-size:11px;color:var(--ink-soft);">(${p.reviewCount})</span></div>
+        <div class="product-name">${p.name}</div>
+        ${sizePills}
+        <div class="product-price-row" id="price-${slug}">
+          <span class="product-orig">${formatPrice(p.original)}</span>
+          <span class="product-sale">${formatPrice(p.price)}</span>
+        </div>
+        <button class="product-add" id="add-${slug}" onclick="handleAddToCart(getActiveProductId('${slug}'), this)">Add to Cart</button>
+        <a href="/product.html?id=${p.id}" class="product-detail-link">View details →</a>
+      </div>`;
+  }).join('');
+}
+
+function getActiveProductId(slug) {
+  const activePill = document.querySelector(`#pills-${slug} .size-pill.active`);
+  return activePill ? activePill.dataset.productId : allProducts.find(p => p.slug === slug)?.id;
+}
+
+function selectSize(pill, slug) {
+  document.querySelectorAll(`#pills-${slug} .size-pill`).forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  const productId = pill.dataset.productId;
+  const product = allProducts.find(p => p.id === productId);
+  if (product) {
+    const priceRow = document.getElementById(`price-${slug}`);
+    priceRow.innerHTML = `<span class="product-orig">${formatPrice(product.original)}</span><span class="product-sale">${formatPrice(product.price)}</span>`;
+  }
+}
+
+// Filter chips
+document.querySelectorAll('.filter-chip').forEach(chip => {
+  if (chip.dataset.flavor === activeFilter) chip.classList.add('active');
+  else if (activeFilter !== 'all') chip.classList.remove('active');
+
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeFilter = chip.dataset.flavor;
+    renderProducts();
+  });
+});
+
+loadProducts();
+</script>
+</body>
+</html>

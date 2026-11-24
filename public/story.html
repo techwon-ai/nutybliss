@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Our Story — NUTYBLISS</title>
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+.story-hero {
+  background: var(--orange); color: #fff;
+  border-bottom: 3px solid var(--ink); padding: 64px 32px;
+  position: relative; overflow: hidden;
+}
+.story-hero::before {
+  content:""; position:absolute; width:500px;height:500px;
+  border-radius:50%; background:var(--purple); bottom:-200px; right:-100px; opacity:0.25;
+}
+.story-hero-inner { position:relative; z-index:2; max-width:1300px; margin:0 auto;
+  display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+.story-hero h1 { font-family:'Bagel Fat One',cursive; font-size:clamp(48px,6vw,88px);
+  color:#fff; text-shadow:4px 4px 0 var(--ink); margin:10px 0 16px; }
+.story-hero p  { font-size:18px; font-weight:500; opacity:0.95; max-width:460px; line-height:1.6; }
+.story-hero-img {
+  width:100%; height:340px; border-radius:24px; border:3px solid var(--ink);
+  background:linear-gradient(135deg,var(--purple),#3a1566);
+  box-shadow:8px 8px 0 var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  font-size:80px; position:relative; overflow:hidden;
+}
+.story-hero-img::before {
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(-45deg,rgba(255,255,255,0.03) 0 12px,transparent 12px 24px);
+}
+
+/* Timeline */
+.timeline-section { padding:88px 32px; background:var(--paper); border-bottom:3px solid var(--ink); }
+.timeline { max-width:800px; margin:0 auto; position:relative; }
+.timeline::before { content:""; position:absolute; left:24px; top:0; bottom:0; width:3px; background:var(--purple); }
+.tl-item { display:flex; gap:32px; margin-bottom:48px; position:relative; }
+.tl-dot {
+  width:52px; height:52px; border-radius:50%; flex-shrink:0;
+  background:var(--orange); border:3px solid var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; box-shadow:3px 3px 0 var(--ink); position:relative; z-index:2;
+}
+.tl-content { background:var(--bg); border:2.5px solid var(--ink); border-radius:18px;
+  padding:20px 24px; box-shadow:4px 4px 0 var(--ink); flex:1; }
+.tl-year { font-family:'Bagel Fat One',cursive; font-size:13px; color:var(--orange);
+  letter-spacing:1px; margin-bottom:6px; }
+.tl-title { font-family:'Bagel Fat One',cursive; font-size:22px; color:var(--purple); margin-bottom:8px; }
+.tl-text { font-size:15px; font-weight:500; color:var(--ink-soft); line-height:1.6; }
+
+/* Values grid */
+.values-section { padding:88px 32px; background:var(--bg); border-bottom:3px solid var(--ink); }
+.values-grid { max-width:1200px; margin:0 auto; display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; }
+.value-card { background:var(--paper); border:2.5px solid var(--ink); border-radius:20px;
+  padding:28px 24px; box-shadow:4px 4px 0 var(--ink); transition:transform 0.2s; }
+.value-card:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+.value-icon { font-size:40px; margin-bottom:14px; }
+.value-title { font-family:'Bagel Fat One',cursive; font-size:22px; color:var(--purple); margin-bottom:8px; }
+.value-text { font-size:14px; font-weight:500; color:var(--ink-soft); line-height:1.6; }
+
+/* Stats */
+.stats-section { background:var(--purple); color:#fff; padding:64px 32px; border-bottom:3px solid var(--ink); }
+.stats-grid { max-width:900px; margin:0 auto; display:grid;
+  grid-template-columns:repeat(4,1fr); gap:24px; text-align:center; }
+.stat-n { font-family:'Bagel Fat One',cursive; font-size:clamp(42px,5vw,70px); color:var(--orange); line-height:1; }
+.stat-l { font-family:'Fredoka',sans-serif; font-size:12px; font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; color:rgba(255,255,255,0.75); margin-top:6px; }
+
+/* Founders */
+.founders-section { padding:88px 32px; background:var(--paper); border-bottom:3px solid var(--ink); }
+.founders-inner { max-width:1100px; margin:0 auto; }
+.founders-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:40px; }
+.founder-big {
+  background:var(--bg); border:2.5px solid var(--ink); border-radius:24px;
+  padding:32px; box-shadow:5px 5px 0 var(--ink); display:flex; gap:24px; align-items:flex-start;
+}
+.founder-avatar-big {
+  width:80px; height:80px; border-radius:50%; border:3px solid var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Bagel Fat One',cursive; font-size:26px; color:#fff; flex-shrink:0;
+}
+.founder-name { font-family:'Bagel Fat One',cursive; font-size:26px; color:var(--purple); margin-bottom:4px; }
+.founder-role-tag { display:inline-block; background:var(--orange); color:#fff;
+  padding:3px 12px; border-radius:999px; border:2px solid var(--ink);
+  font-size:11px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:12px; }
+.founder-bio { font-size:15px; font-weight:500; color:var(--ink-soft); line-height:1.65; }
+
+/* Process */
+.process-section { padding:88px 32px; background:var(--bg-2); border-bottom:3px solid var(--ink); }
+.process-steps { max-width:1100px; margin:0 auto; display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:24px; }
+.process-step { text-align:center; }
+.step-num {
+  width:56px; height:56px; border-radius:50%; margin:0 auto 14px;
+  background:var(--purple); color:#fff; border:3px solid var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Bagel Fat One',cursive; font-size:22px;
+  box-shadow:3px 3px 0 var(--ink);
+}
+.step-icon { font-size:32px; margin-bottom:10px; }
+.step-title { font-family:'Bagel Fat One',cursive; font-size:20px; color:var(--purple); margin-bottom:8px; }
+.step-text { font-size:13px; font-weight:500; color:var(--ink-soft); line-height:1.55; max-width:200px; margin:0 auto; }
+
+@media (max-width:900px) {
+  .story-hero-inner { grid-template-columns:1fr; }
+  .story-hero-img { height:220px; }
+  .founders-grid { grid-template-columns:1fr; }
+  .stats-grid { grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+
+<!-- Hero -->
+<section class="story-hero">
+  <div class="story-hero-inner">
+    <div>
+      <div class="eyebrow" style="color:rgba(255,255,255,0.85);"><span class="dot" style="background:#fff;border-color:var(--ink);"></span>Est. 2024</div>
+      <h1>Born from a peanut obsession.</h1>
+      <p>Two siblings. A garage grinder. A dream of peanut butter with nothing to hide. This is the NUTYBLISS story.</p>
+      <div style="margin-top:24px;">
+        <a href="/shop.html" class="btn btn-primary" style="background:var(--ink);">Shop Our Range →</a>
+      </div>
+    </div>
+    <div class="story-hero-img">🥜</div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-section">
+  <div class="stats-grid">
+    <div><div class="stat-n">50K+</div><div class="stat-l">Happy Jars Sold</div></div>
+    <div><div class="stat-n">5</div><div class="stat-l">Flavors</div></div>
+    <div><div class="stat-n">4.9★</div><div class="stat-l">Avg. Rating</div></div>
+    <div><div class="stat-n">100%</div><div class="stat-l">No Junk</div></div>
+  </div>
+</div>
+
+<!-- Timeline -->
+<section class="timeline-section">
+  <div style="max-width:800px;margin:0 auto 48px;">
+    <div class="eyebrow"><span class="dot"></span>Our Journey</div>
+    <h2 class="section-title">How we got here.</h2>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot">💡</div>
+      <div class="tl-content">
+        <div class="tl-year">EARLY 2024</div>
+        <div class="tl-title">The "Why can't I read the label?" moment</div>
+        <p class="tl-text">Ahmed picks up a peanut butter jar at the supermarket. Reads the label. Palm oil. Emulsifiers. Maltodextrin. Modified starch. Puts it back. Decides to make his own.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">🔧</div>
+      <div class="tl-content">
+        <div class="tl-year">MID 2024</div>
+        <div class="tl-title">The garage grinder era</div>
+        <p class="tl-text">Ahmed and Maryam (his sister) spent six weekends perfecting the stone-grind method. 47 test batches. More peanuts consumed than anyone should admit. Batch #47 was the one.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">🚀</div>
+      <div class="tl-content">
+        <div class="tl-year">SEPT 2024</div>
+        <div class="tl-title">First 100 jars — sold in 4 hours</div>
+        <p class="tl-text">We listed 100 jars of Classic Smooth on Instagram. Sold out in 4 hours. Our DMs exploded. We knew we had something real.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">🏭</div>
+      <div class="tl-content">
+        <div class="tl-year">DEC 2024</div>
+        <div class="tl-title">Real facility. Same recipe.</div>
+        <p class="tl-text">Moved to a PSQCA-certified facility in Lahore. Scaled production. Did NOT change the recipe. The garage formula lives on — just made at scale, with the same stone grinders.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">🌈</div>
+      <div class="tl-content">
+        <div class="tl-year">2025</div>
+        <div class="tl-title">5 flavors, 50,000 jars, 0 regrets</div>
+        <p class="tl-text">Launched Crunchy, Choco Bliss, Choc-Chip, Honey Drip, and Protein+. Hit 50K jars sold. Still using the same peanuts. Still reading every single review.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="values-section">
+  <div style="max-width:1200px;margin:0 auto 44px;">
+    <div class="eyebrow"><span class="dot"></span>What We Stand For</div>
+    <h2 class="section-title">The NUTYBLISS promise.</h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-card">
+      <div class="value-icon">🚫</div>
+      <div class="value-title">Zero Junk</div>
+      <p class="value-text">No palm oil. No added sugar. No emulsifiers. No stabilizers. No hydrogenated fats. If we can't pronounce it, it's not in the jar.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🌿</div>
+      <div class="value-title">Real Ingredients</div>
+      <p class="value-text">Just peanuts. Sometimes a pinch of salt. Our Choco has just cocoa. Our Honey has just honey. Every ingredient is intentional.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🔬</div>
+      <div class="value-title">Honest Nutrition</div>
+      <p class="value-text">25g of protein per 100g. Healthy fats. No sugar crash. No inflated numbers. What's on the label is what's in the jar.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🌱</div>
+      <div class="value-title">Responsible Sourcing</div>
+      <p class="value-text">Non-GMO peanuts from select farms. Minimal packaging. No single-use plastic. Because the planet matters as much as protein.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">💬</div>
+      <div class="value-title">Radical Transparency</div>
+      <p class="value-text">Full ingredient list. Full nutrition facts. No hiding behind "natural flavors." You deserve to know exactly what you're eating.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">❤️</div>
+      <div class="value-title">Made with Love</div>
+      <p class="value-text">Every batch is still checked by Ahmed or Maryam personally. Quality isn't a department — it's a mindset we built into every jar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="process-section">
+  <div style="max-width:1100px;margin:0 auto 48px;">
+    <div class="eyebrow"><span class="dot"></span>How It's Made</div>
+    <h2 class="section-title">From farm to jar.</h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-num">1</div>
+      <div class="step-icon">🌾</div>
+      <div class="step-title">Select Peanuts</div>
+      <p class="step-text">Handpicked non-GMO peanuts from trusted farms. Only the best make it in.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">2</div>
+      <div class="step-icon">🔥</div>
+      <div class="step-title">Slow Roast</div>
+      <p class="step-text">Roasted to the perfect temperature for that deep, nutty flavour without burning out the nutrients.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">3</div>
+      <div class="step-icon">⚙️</div>
+      <div class="step-title">Stone Grind</div>
+      <p class="step-text">Stone ground in small batches — the same method since our first 100 jars. Slow. Cold. Creamy.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">4</div>
+      <div class="step-icon">✅</div>
+      <div class="step-title">Quality Check</div>
+      <p class="step-text">Every batch tested for taste, texture, and nutrition. No jar leaves without our approval.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">5</div>
+      <div class="step-icon">📦</div>
+      <div class="step-title">Packed Fresh</div>
+      <p class="step-text">Sealed in eco-friendly jars. Shipped within 48 hours. No warehousing, always fresh.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Founders -->
+<section class="founders-section">
+  <div class="founders-inner">
+    <div class="eyebrow"><span class="dot"></span>The Founders</div>
+    <h2 class="section-title">The people behind the jar.</h2>
+    <div class="founders-grid">
+      <div class="founder-big">
+        <div class="founder-avatar-big" style="background:var(--purple);">AR</div>
+        <div>
+          <div class="founder-name">Ahmed Raza</div>
+          <span class="founder-role-tag">Co-Founder & Head of Product</span>
+          <p class="founder-bio">Former software engineer turned peanut obsessive. Responsible for the stone-grind method, all five flavors, and consuming roughly 12 jars during R&D. "I wanted a peanut butter that I could give my kid without reading a chemistry textbook first."</p>
+        </div>
+      </div>
+      <div class="founder-big">
+        <div class="founder-avatar-big" style="background:var(--orange);">MR</div>
+        <div>
+          <div class="founder-name">Maryam Raza</div>
+          <span class="founder-role-tag">Co-Founder & Brand Director</span>
+          <p class="founder-bio">Former graphic designer with a food science degree. Handles everything from the packaging to operations to making sure every batch passes the "would I feed this to my parents" test. "Clean food shouldn't look boring. Or taste boring."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--purple);padding:64px 32px;border-bottom:3px solid var(--ink);text-align:center;">
+  <div class="eyebrow" style="justify-content:center;color:var(--orange);margin-bottom:12px;"><span class="dot" style="background:var(--orange);border-color:#fff;"></span>Ready to try?</div>
+  <h2 style="font-family:'Bagel Fat One',cursive;font-size:clamp(36px,5vw,64px);color:#fff;text-shadow:3px 3px 0 var(--orange);margin-bottom:16px;">Get your first jar.</h2>
+  <p style="color:rgba(255,255,255,0.9);font-size:17px;font-weight:500;max-width:440px;margin:0 auto 28px;">Free shipping above Rs. 1,999. 100% satisfaction guarantee. No questions asked.</p>
+  <a href="/shop.html" class="btn btn-primary" style="font-size:16px;padding:14px 32px;">Shop All Flavors →</a>
+</section>
+
+<div id="site-footer"></div>
+<script src="/js/main.js"></script>
+</body>
+</html>

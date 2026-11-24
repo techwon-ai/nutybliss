@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cart — NUTYBLISS</title>
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+.cart-hero {
+  background: var(--purple); color: #fff;
+  border-bottom: 3px solid var(--ink); padding: 48px 32px;
+}
+.cart-hero h1 { font-family:'Bagel Fat One',cursive;font-size:clamp(42px,6vw,80px);
+  color:#fff;text-shadow:4px 4px 0 var(--orange);margin:8px 0 0; }
+
+.cart-layout { max-width:1100px;margin:0 auto;padding:56px 32px;
+  display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start; }
+
+/* Cart items */
+.cart-items-wrap { background:var(--paper);border:2.5px solid var(--ink);border-radius:24px;
+  overflow:hidden;box-shadow:5px 5px 0 var(--ink); }
+.cart-items-head { padding:18px 24px;border-bottom:2.5px solid var(--ink);
+  display:flex;justify-content:space-between;align-items:center; }
+.cart-items-head h2 { font-family:'Bagel Fat One',cursive;font-size:22px;color:var(--purple);margin:0; }
+.cart-clear { font-family:'Fredoka',sans-serif;font-size:12px;font-weight:700;
+  color:var(--tomato);letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;
+  background:none;border:none;text-decoration:underline; }
+
+.cart-item { padding:20px 24px;border-bottom:2px solid rgba(42,22,8,0.1);
+  display:grid;grid-template-columns:64px 1fr auto;gap:16px;align-items:center; }
+.cart-item:last-child { border-bottom:none; }
+.cart-item-jar { width:60px;height:70px;border-radius:8px 8px 40% 40% / 8px 8px 30% 30%;
+  border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;
+  font-size:24px;box-shadow:2px 2px 0 var(--ink); }
+.cart-item-name { font-family:'Bagel Fat One',cursive;font-size:17px;color:var(--purple);line-height:1.1; }
+.cart-item-size { font-family:'Fredoka',sans-serif;font-size:12px;font-weight:600;
+  color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px; }
+.cart-item-price { font-family:'Bagel Fat One',cursive;font-size:18px;color:var(--orange);margin-top:6px; }
+.cart-item-actions { display:flex;flex-direction:column;align-items:flex-end;gap:8px; }
+.qty-control { display:flex;align-items:center;gap:0;border:2px solid var(--ink);border-radius:999px;overflow:hidden; }
+.qty-btn { width:32px;height:32px;background:var(--bg);border:none;
+  font-size:18px;font-weight:700;cursor:pointer;transition:background 0.1s;display:flex;align-items:center;justify-content:center; }
+.qty-btn:hover { background:var(--orange);color:#fff; }
+.qty-num { width:36px;text-align:center;font-family:'Bagel Fat One',cursive;font-size:16px;
+  background:var(--paper);border:none;border-left:2px solid var(--ink);border-right:2px solid var(--ink); }
+.remove-btn { font-family:'Fredoka',sans-serif;font-size:11px;font-weight:700;
+  color:var(--tomato);cursor:pointer;background:none;border:none;text-decoration:underline;
+  text-transform:uppercase;letter-spacing:0.5px; }
+
+/* Summary card */
+.cart-summary { background:var(--paper);border:2.5px solid var(--ink);border-radius:24px;
+  overflow:hidden;box-shadow:5px 5px 0 var(--ink);position:sticky;top:90px; }
+.summary-head { background:var(--purple);padding:18px 24px; }
+.summary-head h2 { font-family:'Bagel Fat One',cursive;font-size:22px;color:#fff;margin:0; }
+.summary-body { padding:24px; }
+.summary-row { display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1.5px dashed rgba(42,22,8,0.12); }
+.summary-row:last-of-type { border-bottom:none; }
+.summary-label { font-family:'Fredoka',sans-serif;font-size:14px;font-weight:600;color:var(--ink-soft); }
+.summary-val { font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;color:var(--ink); }
+.summary-total { display:flex;justify-content:space-between;align-items:center;
+  padding:16px 0 0;margin-top:8px;border-top:3px solid var(--ink); }
+.summary-total-label { font-family:'Bagel Fat One',cursive;font-size:20px;color:var(--ink); }
+.summary-total-val { font-family:'Bagel Fat One',cursive;font-size:28px;color:var(--orange); }
+.free-ship-bar { background:var(--bg-2);border:1.5px solid var(--ink);border-radius:12px;
+  padding:10px 14px;margin:14px 0;font-family:'Fredoka',sans-serif;font-size:12px;font-weight:600;color:var(--ink-soft); }
+.free-ship-progress { height:8px;background:rgba(42,22,8,0.1);border-radius:999px;
+  border:1px solid var(--ink);margin-top:6px;overflow:hidden; }
+.free-ship-fill { height:100%;background:var(--leaf);border-radius:999px;transition:width 0.5s; }
+.coupon-row { display:flex;gap:8px;margin-bottom:14px; }
+.coupon-input { flex:1;padding:10px 14px;border:2px solid var(--ink);border-radius:999px;
+  font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600;background:var(--bg);
+  color:var(--ink);outline:none; }
+.coupon-input:focus { border-color:var(--orange); }
+.coupon-btn { padding:10px 16px;border-radius:999px;border:2px solid var(--ink);background:var(--orange);
+  color:#fff;font-family:'Fredoka',sans-serif;font-size:13px;font-weight:700;cursor:pointer;
+  box-shadow:2px 2px 0 var(--ink); }
+.coupon-msg { font-size:12px;font-weight:600;margin-bottom:10px; }
+.coupon-ok { color:var(--leaf); }
+.coupon-err { color:var(--tomato); }
+
+/* Checkout form */
+.checkout-section { max-width:1100px;margin:0 auto;padding:0 32px 64px; }
+.checkout-card { background:var(--paper);border:2.5px solid var(--ink);border-radius:24px;
+  padding:36px;box-shadow:5px 5px 0 var(--ink); }
+.checkout-card h2 { font-family:'Bagel Fat One',cursive;font-size:28px;color:var(--purple);margin-bottom:24px; }
+.form-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
+.form-grid-3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px; }
+
+/* Order confirmation */
+.order-success { display:none;background:var(--leaf);color:#fff;border:3px solid var(--ink);
+  border-radius:24px;padding:48px 32px;text-align:center;box-shadow:6px 6px 0 var(--ink);margin-bottom:40px; }
+.order-success h2 { font-family:'Bagel Fat One',cursive;font-size:40px;color:#fff;margin-bottom:12px; }
+.order-success p { font-size:16px;font-weight:500;opacity:0.95;max-width:440px;margin:0 auto 20px; }
+.order-id { font-family:'Bagel Fat One',cursive;font-size:22px;color:var(--honey);margin:8px 0 20px; }
+
+/* Payment method */
+.pay-methods { display:flex;flex-direction:column;gap:10px;margin-top:8px; }
+.pay-option { cursor:pointer; }
+.pay-option input[type="radio"] { display:none; }
+.pay-option-inner {
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-radius:14px;
+  border:2.5px solid var(--ink);background:var(--bg);
+  box-shadow:3px 3px 0 var(--ink);transition:all 0.15s;
+}
+.pay-option input:checked + .pay-option-inner {
+  background:var(--purple);border-color:var(--purple);color:#fff;
+  box-shadow:3px 3px 0 var(--ink);
+}
+.pay-option input:checked + .pay-option-inner .pay-sub { color:rgba(255,255,255,0.75); }
+.pay-icon { font-size:22px; }
+.pay-title { font-family:'Bagel Fat One',cursive;font-size:15px; }
+.pay-sub { font-family:'Fredoka',sans-serif;font-size:12px;font-weight:500;color:var(--ink-soft); }
+.pay-check { margin-left:auto;font-size:18px;font-weight:700;opacity:0;transition:opacity 0.15s; }
+.pay-option input:checked + .pay-option-inner .pay-check { opacity:1; }
+
+@media (max-width:900px) {
+  .cart-layout { grid-template-columns:1fr; }
+  .cart-summary { position:static; }
+}
+@media (max-width:600px) {
+  .cart-layout { padding:32px 16px; }
+  .checkout-section { padding:0 16px 48px; }
+  .form-grid-2,.form-grid-3 { grid-template-columns:1fr; }
+  .cart-item { grid-template-columns:52px 1fr auto; gap:10px; }
+}
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+
+<div class="cart-hero">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="eyebrow" style="color:var(--orange);"><span class="dot" style="background:var(--orange);border-color:#fff;"></span>Your Cart</div>
+    <h1>Your jar lineup.</h1>
+  </div>
+</div>
+
+<div class="cart-layout" id="cart-layout">
+  <div class="spinner" style="grid-column:1/-1;"></div>
+</div>
+
+<div class="checkout-section" id="checkout-section" style="display:none;">
+  <div class="order-success" id="order-success">
+    <div style="font-size:56px;margin-bottom:12px;">🎉</div>
+    <h2>Order Confirmed!</h2>
+    <p>Your peanut butter is being packed with love. Expected delivery in 2–5 days.</p>
+    <div class="order-id" id="order-id-display"></div>
+    <a href="/shop.html" class="btn btn-primary" style="background:#fff;color:var(--leaf);border-color:var(--ink);">Continue Shopping →</a>
+  </div>
+  <div class="checkout-card" id="checkout-card">
+    <h2>Delivery Details</h2>
+    <form id="checkout-form">
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" class="form-input" id="c-name" placeholder="Ahmed Raza" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number *</label>
+          <input type="tel" class="form-input" id="c-phone" placeholder="+92 300 1234567" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input type="email" class="form-input" id="c-email" placeholder="priya@email.com" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Street Address *</label>
+        <input type="text" class="form-input" id="c-address" placeholder="House 4B, Gulberg III, Main Boulevard" required />
+      </div>
+      <div class="form-grid-3">
+        <div class="form-group">
+          <label class="form-label">City *</label>
+          <input type="text" class="form-input" id="c-city" placeholder="Lahore" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Province *</label>
+          <input type="text" class="form-input" id="c-state" placeholder="Punjab" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Postal Code *</label>
+          <input type="text" class="form-input" id="c-pincode" placeholder="54000" required />
+        </div>
+      </div>
+      <!-- Payment Method -->
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Payment Method *</label>
+        <div class="pay-methods" id="pay-methods">
+          <label class="pay-option" id="pay-visa">
+            <input type="radio" name="payment" value="visa" checked />
+            <div class="pay-option-inner">
+              <span class="pay-icon">💳</span>
+              <div>
+                <div class="pay-title">Visa / Debit Card</div>
+                <div class="pay-sub">Secure card payment</div>
+              </div>
+              <div class="pay-check">✓</div>
+            </div>
+          </label>
+          <label class="pay-option" id="pay-cod">
+            <input type="radio" name="payment" value="cod" />
+            <div class="pay-option-inner">
+              <span class="pay-icon">💵</span>
+              <div>
+                <div class="pay-title">Cash on Delivery</div>
+                <div class="pay-sub">Pay when your order arrives</div>
+              </div>
+              <div class="pay-check">✓</div>
+            </div>
+          </label>
+        </div>
+        <!-- Visa card fields -->
+        <div id="visa-fields" style="margin-top:14px;">
+          <div class="form-grid-2">
+            <div class="form-group" style="grid-column:1/-1;">
+              <label class="form-label">Card Number</label>
+              <input type="text" class="form-input" id="c-card-num" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" />
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Expiry</label>
+              <input type="text" class="form-input" id="c-card-exp" placeholder="MM / YY" maxlength="7" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">CVV</label>
+              <input type="text" class="form-input" id="c-card-cvv" placeholder="•••" maxlength="4" inputmode="numeric" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Name on Card</label>
+            <input type="text" class="form-input" id="c-card-name" placeholder="AHMED RAZA" />
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:4px;margin-bottom:4px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" style="height:22px;filter:grayscale(30%);" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" style="height:22px;" />
+            <span style="font-size:11px;font-weight:600;color:var(--ink-soft);margin-left:4px;">🔒 256-bit SSL encrypted</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="checkout-err" style="color:var(--tomato);font-size:13px;font-weight:600;margin-bottom:10px;margin-top:16px;display:none;"></div>
+      <button type="submit" class="btn btn-primary btn-full" style="font-size:16px;padding:14px 24px;margin-top:16px;" id="place-order-btn">
+        Place Order →
+      </button>
+      <p style="font-size:12px;font-weight:500;color:var(--ink-soft);text-align:center;margin-top:12px;">
+        🔒 Secure checkout · Visa &amp; Mastercard accepted · Free returns within 7 days
+      </p>
+    </form>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script src="/js/main.js"></script>
+<script>
+const FREE_SHIP = 1999;
+const SHIP_FEE  = 150;
+let cartData    = [];
+let discount    = 0;
+let couponCode  = '';
+
+const VALID_COUPONS = { 'NUTY10': 10, 'WELCOME15': 15, 'BLISS20': 20, 'PAKISTAN10': 10 };
+
+async function loadCart() {
+  const layout = document.getElementById('cart-layout');
+  try {
+    const res = await fetch('/api/cart', { credentials: 'include' });
+    const { data, total } = await res.json();
+    cartData = data;
+    if (!data.length) {
+      layout.innerHTML = `
+        <div class="empty-state" style="grid-column:1/-1;padding:80px 20px;">
+          <div class="empty-icon">🛒</div>
+          <h3>Your cart is empty</h3>
+          <p>Looks like you haven't added any jars yet.</p>
+          <a href="/shop.html" class="btn btn-primary">Shop Now →</a>
+        </div>`;
+      return;
+    }
+    renderCart(data);
+    document.getElementById('checkout-section').style.display = 'block';
+  } catch(e) {
+    layout.innerHTML = '<p style="padding:20px;color:var(--ink-soft)">Could not load cart.</p>';
+  }
+}
+
+function renderCart(items) {
+  const subtotal  = items.reduce((s, i) => s + i.price * i.qty, 0);
+  const shipping  = subtotal >= FREE_SHIP ? 0 : SHIP_FEE;
+  const discAmt   = Math.round(subtotal * discount / 100);
+  const total     = subtotal - discAmt + shipping;
+  const shipPct   = Math.min(100, Math.round(subtotal / FREE_SHIP * 100));
+
+  document.getElementById('cart-layout').innerHTML = `
+    <div>
+      <div class="cart-items-wrap">
+        <div class="cart-items-head">
+          <h2>Cart (${items.reduce((s,i)=>s+i.qty,0)} items)</h2>
+          <button class="cart-clear" onclick="clearCart()">Clear all</button>
+        </div>
+        ${items.map(item => `
+          <div class="cart-item" id="ci-${item.cartItemId}">
+            <img src="/images/jar-${item.flavor === 'protein' ? 'classic' : item.flavor}.png"
+                 alt="${item.name}"
+                 style="width:60px;height:70px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.18));" />
+            <div>
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-size">${item.size}</div>
+              <div class="cart-item-price">${formatPrice(item.price)}</div>
+            </div>
+            <div class="cart-item-actions">
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty('${item.cartItemId}', ${item.qty - 1})">−</button>
+                <span class="qty-num">${item.qty}</span>
+                <button class="qty-btn" onclick="changeQty('${item.cartItemId}', ${item.qty + 1})">+</button>
+              </div>
+              <div style="font-family:'Bagel Fat One',cursive;font-size:15px;color:var(--ink);">${formatPrice(item.price * item.qty)}</div>
+              <button class="remove-btn" onclick="removeItem('${item.cartItemId}')">Remove</button>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div>
+      <div class="cart-summary">
+        <div class="summary-head"><h2>Order Summary</h2></div>
+        <div class="summary-body">
+          <div class="free-ship-bar">
+            ${subtotal >= FREE_SHIP
+              ? '🎉 You have free shipping!'
+              : `Add ${formatPrice(FREE_SHIP - subtotal)} more for free shipping`}
+            <div class="free-ship-progress">
+              <div class="free-ship-fill" style="width:${shipPct}%"></div>
+            </div>
+          </div>
+          <div class="coupon-row">
+            <input class="coupon-input" id="coupon-input" placeholder="Coupon code" value="${couponCode}" />
+            <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
+          </div>
+          <div id="coupon-msg" class="coupon-msg"></div>
+          <div class="summary-row">
+            <span class="summary-label">Subtotal</span>
+            <span class="summary-val">${formatPrice(subtotal)}</span>
+          </div>
+          ${discAmt ? `<div class="summary-row">
+            <span class="summary-label">Discount (${discount}%)</span>
+            <span class="summary-val" style="color:var(--leaf);">−${formatPrice(discAmt)}</span>
+          </div>` : ''}
+          <div class="summary-row">
+            <span class="summary-label">Shipping</span>
+            <span class="summary-val">${shipping === 0 ? '<span style="color:var(--leaf);">FREE</span>' : formatPrice(shipping)}</span>
+          </div>
+          <div class="summary-total">
+            <span class="summary-total-label">Total</span>
+            <span class="summary-total-val">${formatPrice(total)}</span>
+          </div>
+          <button class="btn btn-primary btn-full" style="margin-top:20px;font-size:15px;padding:14px;"
+            onclick="document.getElementById('checkout-card').scrollIntoView({behavior:'smooth'})">
+            Proceed to Checkout →
+          </button>
+          <a href="/shop.html" class="btn btn-ghost btn-full" style="margin-top:10px;justify-content:center;">← Continue Shopping</a>
+        </div>
+      </div>
+    </div>`;
+}
+
+async function changeQty(cartItemId, newQty) {
+  const res  = await Cart.update(cartItemId, newQty);
+  cartData   = res.data;
+  renderCart(cartData);
+  refreshCartBadge();
+}
+async function removeItem(cartItemId) {
+  const res = await Cart.remove(cartItemId);
+  cartData  = res.data;
+  if (!cartData.length) { loadCart(); document.getElementById('checkout-section').style.display='none'; return; }
+  renderCart(cartData);
+  refreshCartBadge();
+}
+async function clearCart() {
+  await Cart.clear();
+  cartData = [];
+  loadCart();
+  document.getElementById('checkout-section').style.display = 'none';
+  refreshCartBadge();
+}
+
+function applyCoupon() {
+  const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+  const msgEl = document.getElementById('coupon-msg');
+  if (VALID_COUPONS[code]) {
+    discount   = VALID_COUPONS[code];
+    couponCode = code;
+    msgEl.innerHTML = `<span class="coupon-ok">✓ Code applied — ${discount}% off!</span>`;
+    renderCart(cartData);
+  } else {
+    msgEl.innerHTML = `<span class="coupon-err">✗ Invalid code. Try NUTY10</span>`;
+  }
+}
+
+// Payment method toggle
+document.querySelectorAll('input[name="payment"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const visaFields = document.getElementById('visa-fields');
+    if (visaFields) visaFields.style.display = radio.value === 'visa' ? 'block' : 'none';
+  });
+});
+
+// Card number formatting
+const cardNumInput = document.getElementById('c-card-num');
+if (cardNumInput) {
+  cardNumInput.addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 16);
+    e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+  });
+}
+const cardExpInput = document.getElementById('c-card-exp');
+if (cardExpInput) {
+  cardExpInput.addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length >= 2) v = v.slice(0,2) + ' / ' + v.slice(2);
+    e.target.value = v;
+  });
+}
+
+// Checkout form
+document.getElementById('checkout-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const errEl = document.getElementById('checkout-err');
+  errEl.style.display = 'none';
+  const btn = document.getElementById('place-order-btn');
+  btn.disabled = true; btn.textContent = 'Placing order…';
+  try {
+    const res = await fetch('/api/orders', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name:    document.getElementById('c-name').value,
+        email:   document.getElementById('c-email').value,
+        phone:   document.getElementById('c-phone').value,
+        address: document.getElementById('c-address').value,
+        city:    document.getElementById('c-city').value,
+        state:   document.getElementById('c-state').value,
+        pincode: document.getElementById('c-pincode').value
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('checkout-card').style.display  = 'none';
+      document.getElementById('order-success').style.display  = 'block';
+      document.getElementById('order-id-display').textContent = 'Order ID: ' + data.data.orderId;
+      document.getElementById('cart-layout').innerHTML = '';
+      refreshCartBadge();
+      window.scrollTo({ top: document.getElementById('checkout-section').offsetTop - 80, behavior: 'smooth' });
+    } else {
+      errEl.textContent = data.message; errEl.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Place Order →';
+
+    }
+  } catch(e) {
+    errEl.textContent = 'Network error. Please try again.'; errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Place Order →';
+  }
+});
+
+loadCart();
+</script>
+</body>
+</html>
